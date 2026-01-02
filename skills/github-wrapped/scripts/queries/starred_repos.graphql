@@ -1,0 +1,20 @@
+query($user: String!, $endCursor: String) {
+  user(login: $user) {
+    starredRepositories(first: 100, after: $endCursor, orderBy: {field: STARRED_AT, direction: DESC}) {
+      edges {
+        starredAt
+        node {
+          nameWithOwner
+          url
+          description
+          stargazerCount
+          forkCount
+          primaryLanguage { name }
+          owner { login }
+          repositoryTopics(first: 20) { nodes { topic { name } } }
+        }
+      }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+}
