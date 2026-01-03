@@ -25,6 +25,7 @@ Run `./install.sh help` for more options.
 | [gemini-image](skills/gemini-image/) | AI image generation via Gemini API (text-to-image, image-to-image) |
 | [github-wrapped](skills/github-wrapped/) | Generate verifiable GitHub year-in-review as single-file HTML |
 | [research](skills/research/) | Technical research with web search and citation support |
+| [spec-interview](skills/spec-interview/) | Deep interview to refine technical specs through systematic questioning |
 | [tech-blog](skills/tech-blog/) | Write technical blog posts with source code analysis |
 | [tech-design-doc](skills/tech-design-doc/) | Generate structured technical design documents |
 
