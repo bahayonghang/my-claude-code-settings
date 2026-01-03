@@ -18,27 +18,56 @@ GLOBAL_SKILLS_DIR="${GLOBAL_CLAUDE_DIR}/skills"
 GLOBAL_CLAUDE_MD="${GLOBAL_CLAUDE_DIR}/CLAUDE.md"
 LOCAL_CLAUDE_MD="${PROMPTS_DIR}/CLAUDE.md"
 
+# Codex paths
+GLOBAL_CODEX_DIR="${HOME}/.codex"
+GLOBAL_CODEX_SKILLS_DIR="${GLOBAL_CODEX_DIR}/skills"
+
+# Target selection (claude or codex)
+TARGET="claude"
+
 # Print functions
 info() { echo -e "${BLUE}[INFO]${NC} $*"; }
 success() { echo -e "${GREEN}[SUCCESS]${NC} $*"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
-# Ensure global Claude directory exists
-ensure_global_dir() {
-    if [[ ! -d "${GLOBAL_CLAUDE_DIR}" ]]; then
-        info "Creating ${GLOBAL_CLAUDE_DIR}"
-        mkdir -p "${GLOBAL_CLAUDE_DIR}"
+# Get target skills directory based on TARGET
+get_target_skills_dir() {
+    if [[ "${TARGET}" == "codex" ]]; then
+        echo "${GLOBAL_CODEX_SKILLS_DIR}"
+    else
+        echo "${GLOBAL_SKILLS_DIR}"
     fi
-    if [[ ! -d "${GLOBAL_SKILLS_DIR}" ]]; then
-        info "Creating ${GLOBAL_SKILLS_DIR}"
-        mkdir -p "${GLOBAL_SKILLS_DIR}"
+}
+
+# Get target base directory based on TARGET
+get_target_base_dir() {
+    if [[ "${TARGET}" == "codex" ]]; then
+        echo "${GLOBAL_CODEX_DIR}"
+    else
+        echo "${GLOBAL_CLAUDE_DIR}"
+    fi
+}
+
+# Ensure global directory exists
+ensure_global_dir() {
+    local base_dir=$(get_target_base_dir)
+    local skills_dir=$(get_target_skills_dir)
+
+    if [[ ! -d "${base_dir}" ]]; then
+        info "Creating ${base_dir}"
+        mkdir -p "${base_dir}"
+    fi
+    if [[ ! -d "${skills_dir}" ]]; then
+        info "Creating ${skills_dir}"
+        mkdir -p "${skills_dir}"
     fi
 }
 
 # List available skills in repository
 list_skills() {
-    echo -e "\n${BLUE}=== Available Skills in Repository ===${NC}"
+    local target_skills_dir=$(get_target_skills_dir)
+    echo -e "\n${BLUE}=== Available Skills in Repository (Target: ${TARGET}) ===${NC}"
 
     if [[ ! -d "${SKILLS_DIR}" ]]; then
         error "Skills directory not found: ${SKILLS_DIR}"
@@ -63,7 +92,7 @@ list_skills() {
             fi
 
             # Check if already installed
-            if [[ -d "${GLOBAL_SKILLS_DIR}/${skill_name}" ]]; then
+            if [[ -d "${target_skills_dir}/${skill_name}" ]]; then
                 echo -e "    Status: ${YELLOW}Already installed${NC}"
             else
                 echo -e "    Status: ${RED}Not installed${NC}"
@@ -79,15 +108,16 @@ list_skills() {
 
 # List installed skills
 list_installed() {
-    echo -e "\n${BLUE}=== Installed Skills ===${NC}"
+    local target_skills_dir=$(get_target_skills_dir)
+    echo -e "\n${BLUE}=== Installed Skills (Target: ${TARGET}) ===${NC}"
 
-    if [[ ! -d "${GLOBAL_SKILLS_DIR}" ]]; then
-        warn "Global skills directory does not exist: ${GLOBAL_SKILLS_DIR}"
+    if [[ ! -d "${target_skills_dir}" ]]; then
+        warn "Skills directory does not exist: ${target_skills_dir}"
         return 0
     fi
 
     local count=0
-    for skill_path in "${GLOBAL_SKILLS_DIR}"/*; do
+    for skill_path in "${target_skills_dir}"/*; do
         if [[ -d "${skill_path}" ]]; then
             local skill_name=$(basename "${skill_path}")
             count=$((count + 1))
@@ -112,7 +142,8 @@ list_installed() {
 install_skill() {
     local skill_name=$1
     local skill_src="${SKILLS_DIR}/${skill_name}"
-    local skill_dst="${GLOBAL_SKILLS_DIR}/${skill_name}"
+    local target_skills_dir=$(get_target_skills_dir)
+    local skill_dst="${target_skills_dir}/${skill_name}"
 
     if [[ ! -d "${skill_src}" ]]; then
         error "Skill not found: ${skill_name}"
@@ -126,14 +157,14 @@ install_skill() {
         rm -rf "${skill_dst}"
     fi
 
-    info "Installing skill: ${skill_name}"
+    info "Installing skill: ${skill_name} (to ${TARGET})"
     cp -r "${skill_src}" "${skill_dst}"
     success "Installed: ${skill_name} → ${skill_dst}"
 }
 
 # Install all skills
 install_all_skills() {
-    echo -e "\n${BLUE}=== Installing All Skills ===${NC}\n"
+    echo -e "\n${BLUE}=== Installing All Skills (Target: ${TARGET}) ===${NC}\n"
 
     if [[ ! -d "${SKILLS_DIR}" ]]; then
         error "Skills directory not found: ${SKILLS_DIR}"
@@ -155,7 +186,7 @@ install_all_skills() {
     done
 
     echo ""
-    success "Installed ${count} skills"
+    success "Installed ${count} skills to ${TARGET}"
     if [[ $failed -gt 0 ]]; then
         error "Failed to install ${failed} skills"
     fi
@@ -195,7 +226,7 @@ install_interactive() {
     done
 
     echo ""
-    success "Installed ${count} skills"
+    success "Installed ${count} skills to ${TARGET}"
 }
 
 # Update global CLAUDE.md
@@ -238,7 +269,7 @@ diff_prompt() {
 # Print usage
 usage() {
     cat << EOF
-${BLUE}Claude Skills & Config Manager${NC}
+${BLUE}Claude/Codex Skills & Config Manager${NC}
 
 Usage: $0 [COMMAND] [OPTIONS]
 
@@ -252,21 +283,49 @@ Commands:
   prompt-diff       Show diff between local and global CLAUDE.md
   help              Show this help message
 
+Options:
+  --target=claude   Install to ~/.claude/skills (default)
+  --target=codex    Install to ~/.codex/skills
+
 Examples:
-  $0 list                           # Show available skills
-  $0 install codex frontend-design  # Install specific skills
-  $0 install-all                    # Install all skills
-  $0 interactive                    # Interactive mode
-  $0 prompt-update                  # Update global CLAUDE.md
+  $0 list                                    # Show available skills (Claude)
+  $0 --target=codex list                     # Show available skills (Codex)
+  $0 install codex frontend-design           # Install specific skills to Claude
+  $0 --target=codex install-all              # Install all skills to Codex
+  $0 interactive                             # Interactive mode (Claude)
+  $0 --target=codex interactive              # Interactive mode (Codex)
+  $0 prompt-update                           # Update global CLAUDE.md
 
 Environment:
-  Repository: ${SCRIPT_DIR}
-  Global dir: ${GLOBAL_CLAUDE_DIR}
+  Repository:   ${SCRIPT_DIR}
+  Claude dir:   ${GLOBAL_CLAUDE_DIR}
+  Codex dir:    ${GLOBAL_CODEX_DIR}
 EOF
 }
 
 # Main logic
 main() {
+    # Parse --target option
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --target=claude)
+                TARGET="claude"
+                shift
+                ;;
+            --target=codex)
+                TARGET="codex"
+                shift
+                ;;
+            --target=*)
+                error "Invalid target: ${1#--target=}. Use 'claude' or 'codex'."
+                exit 1
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+
     if [[ $# -eq 0 ]]; then
         usage
         exit 0

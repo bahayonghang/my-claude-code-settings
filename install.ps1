@@ -1,13 +1,17 @@
 <#
 .SYNOPSIS
-    Claude Skills & Config Manager for Windows (PowerShell)
+    Claude/Codex Skills & Config Manager for Windows (PowerShell)
 .DESCRIPTION
-    Manages installation of Claude skills and configuration.
+    Manages installation of Claude/Codex skills and configuration.
     Ported from install.sh
+.PARAMETER Target
+    Target platform: 'claude' (default) or 'codex'
 #>
 
 param(
     [string]$Command,
+    [ValidateSet("claude", "codex")]
+    [string]$Target = "claude",
     [string[]]$RemainingArgs
 )
 
@@ -16,10 +20,16 @@ $ErrorActionPreference = "Stop"
 $ScriptDir = $PSScriptRoot
 $SkillsDir = Join-Path $ScriptDir "skills"
 $PromptsDir = Join-Path $ScriptDir "prompts"
+
+# Claude paths
 $GlobalClaudeDir = Join-Path $HOME ".claude"
-$GlobalSkillsDir = Join-Path $GlobalClaudeDir "skills"
+$GlobalClaudeSkillsDir = Join-Path $GlobalClaudeDir "skills"
 $GlobalClaudeMd = Join-Path $GlobalClaudeDir "CLAUDE.md"
 $LocalClaudeMd = Join-Path $PromptsDir "CLAUDE.md"
+
+# Codex paths
+$GlobalCodexDir = Join-Path $HOME ".codex"
+$GlobalCodexSkillsDir = Join-Path $GlobalCodexDir "skills"
 
 # Helper Functions
 function Write-Info { param([string]$Message) Write-Host "[INFO] $Message" -ForegroundColor Blue }
@@ -27,14 +37,31 @@ function Write-Success { param([string]$Message) Write-Host "[SUCCESS] $Message"
 function Write-Warn { param([string]$Message) Write-Host "[WARN] $Message" -ForegroundColor Yellow }
 function Write-Error { param([string]$Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
 
-function Ensure-GlobalDir {
-    if (-not (Test-Path $GlobalClaudeDir)) {
-        Write-Info "Creating $GlobalClaudeDir"
-        New-Item -ItemType Directory -Path $GlobalClaudeDir -Force | Out-Null
+function Get-TargetBaseDir {
+    if ($Target -eq "codex") {
+        return $GlobalCodexDir
     }
-    if (-not (Test-Path $GlobalSkillsDir)) {
-        Write-Info "Creating $GlobalSkillsDir"
-        New-Item -ItemType Directory -Path $GlobalSkillsDir -Force | Out-Null
+    return $GlobalClaudeDir
+}
+
+function Get-TargetSkillsDir {
+    if ($Target -eq "codex") {
+        return $GlobalCodexSkillsDir
+    }
+    return $GlobalClaudeSkillsDir
+}
+
+function Ensure-GlobalDir {
+    $baseDir = Get-TargetBaseDir
+    $skillsDir = Get-TargetSkillsDir
+
+    if (-not (Test-Path $baseDir)) {
+        Write-Info "Creating $baseDir"
+        New-Item -ItemType Directory -Path $baseDir -Force | Out-Null
+    }
+    if (-not (Test-Path $skillsDir)) {
+        Write-Info "Creating $skillsDir"
+        New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
     }
 }
 
@@ -52,7 +79,8 @@ function Get-SkillDescription {
 }
 
 function List-Skills {
-    Write-Host "`n=== Available Skills in Repository ===" -ForegroundColor Blue
+    $targetSkillsDir = Get-TargetSkillsDir
+    Write-Host "`n=== Available Skills in Repository (Target: $Target) ===" -ForegroundColor Blue
 
     if (-not (Test-Path $SkillsDir)) {
         Write-Error "Skills directory not found: $SkillsDir"
@@ -75,7 +103,7 @@ function List-Skills {
             Write-Host "    Description: $desc"
         }
 
-        $installedPath = Join-Path $GlobalSkillsDir $skill.Name
+        $installedPath = Join-Path $targetSkillsDir $skill.Name
         if (Test-Path $installedPath) {
             Write-Host "    Status: Already installed" -ForegroundColor Yellow
         } else {
@@ -86,14 +114,15 @@ function List-Skills {
 }
 
 function List-Installed {
-    Write-Host "`n=== Installed Skills ===" -ForegroundColor Blue
+    $targetSkillsDir = Get-TargetSkillsDir
+    Write-Host "`n=== Installed Skills (Target: $Target) ===" -ForegroundColor Blue
 
-    if (-not (Test-Path $GlobalSkillsDir)) {
-        Write-Warn "Global skills directory does not exist: $GlobalSkillsDir"
+    if (-not (Test-Path $targetSkillsDir)) {
+        Write-Warn "Skills directory does not exist: $targetSkillsDir"
         return
     }
 
-    $installed = Get-ChildItem -Path $GlobalSkillsDir -Directory
+    $installed = Get-ChildItem -Path $targetSkillsDir -Directory
     if ($installed.Count -eq 0) {
         Write-Warn "No skills installed"
         Write-Host ""
@@ -117,7 +146,8 @@ function Install-Skill {
     param([string]$SkillName)
 
     $skillSrc = Join-Path $SkillsDir $SkillName
-    $skillDst = Join-Path $GlobalSkillsDir $SkillName
+    $targetSkillsDir = Get-TargetSkillsDir
+    $skillDst = Join-Path $targetSkillsDir $SkillName
 
     if (-not (Test-Path $skillSrc)) {
         Write-Error "Skill not found: $SkillName"
@@ -131,14 +161,14 @@ function Install-Skill {
         Remove-Item -Path $skillDst -Recurse -Force
     }
 
-    Write-Info "Installing skill: $SkillName"
+    Write-Info "Installing skill: $SkillName (to $Target)"
     Copy-Item -Path $skillSrc -Destination $skillDst -Recurse -Force
     Write-Success "Installed: $SkillName -> $skillDst"
     return $true
 }
 
 function Install-All-Skills {
-    Write-Host "`n=== Installing All Skills ===`n" -ForegroundColor Blue
+    Write-Host "`n=== Installing All Skills (Target: $Target) ===`n" -ForegroundColor Blue
 
     if (-not (Test-Path $SkillsDir)) {
         Write-Error "Skills directory not found: $SkillsDir"
@@ -158,7 +188,7 @@ function Install-All-Skills {
     }
 
     Write-Host ""
-    Write-Success "Installed $count skills"
+    Write-Success "Installed $count skills to $Target"
     if ($failed -gt 0) {
         Write-Error "Failed to install $failed skills"
     }
@@ -197,7 +227,7 @@ function Install-Interactive {
     }
 
     Write-Host ""
-    Write-Success "Installed $count skills"
+    Write-Success "Installed $count skills to $Target"
 }
 
 function Update-Global-Prompt {
@@ -247,9 +277,9 @@ function Diff-Prompt {
 }
 
 function Show-Usage {
-    Write-Host "Claude Skills & Config Manager (PowerShell)" -ForegroundColor Blue
+    Write-Host "Claude/Codex Skills & Config Manager (PowerShell)" -ForegroundColor Blue
     Write-Host ""
-    Write-Host "Usage: .\install.ps1 [COMMAND] [OPTIONS]"
+    Write-Host "Usage: .\install.ps1 [-Target claude|codex] [COMMAND] [OPTIONS]"
     Write-Host ""
     Write-Host "Commands:"
     Write-Host "  list              List all available skills in repository"
@@ -261,14 +291,21 @@ function Show-Usage {
     Write-Host "  prompt-diff       Show diff between local and global CLAUDE.md"
     Write-Host "  help              Show this help message"
     Write-Host ""
+    Write-Host "Options:"
+    Write-Host "  -Target claude    Install to ~/.claude/skills (default)"
+    Write-Host "  -Target codex     Install to ~/.codex/skills"
+    Write-Host ""
     Write-Host "Examples:"
     Write-Host "  .\install.ps1 list"
+    Write-Host "  .\install.ps1 -Target codex list"
     Write-Host "  .\install.ps1 install codex frontend-design"
+    Write-Host "  .\install.ps1 -Target codex install-all"
     Write-Host "  .\install.ps1 interactive"
     Write-Host ""
     Write-Host "Environment:"
-    Write-Host "  Repository: $ScriptDir"
-    Write-Host "  Global dir: $GlobalClaudeDir"
+    Write-Host "  Repository:   $ScriptDir"
+    Write-Host "  Claude dir:   $GlobalClaudeDir"
+    Write-Host "  Codex dir:    $GlobalCodexDir"
 }
 
 # Main Logic
