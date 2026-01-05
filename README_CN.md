@@ -1,10 +1,29 @@
 # MyClaude Skills
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Claude Code 技能和提示词集合，用于增强 AI 辅助开发工作流。
+
+## 特性
+
+- 🎯 可复用的 AI 技能模块，覆盖前端设计、技术研究、文档生成等场景
+- 📦 统一的技能定义格式（`SKILL.md`），便于扩展和维护
+- 🔄 跨平台安装脚本（Bash + PowerShell）
+- 🎛️ 双目标支持：Claude Code (`~/.claude/`) 和 Codex CLI (`~/.codex/`)
+
+## 前置要求
+
+- Git
+- Bash (Linux/macOS) 或 PowerShell (Windows)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Codex CLI](https://github.com/openai/codex)
 
 ## 快速开始
 
 ```bash
+# 克隆仓库
+git clone https://github.com/anthropics/my-claude-skills.git
+cd my-claude-skills
+
 # 安装所有技能
 ./install.sh install-all
 
@@ -23,24 +42,90 @@ Claude Code 技能和提示词集合，用于增强 AI 辅助开发工作流。
 | [excalidraw](skills/excalidraw/) | 创建手绘风格的 Excalidraw JSON 图表 |
 | [frontend-design](skills/frontend-design/) | 构建独特的生产级前端界面 |
 | [gemini-image](skills/gemini-image/) | 通过 Gemini API 生成图像（文生图、图生图） |
-| [github-wrapped](skills/github-wrapped/) | 生成可验证的 GitHub 年度回顾单文件 HTML |
 | [research](skills/research/) | 技术研究，支持网络搜索和引用 |
 | [spec-interview](skills/spec-interview/) | 通过系统性提问深度访谈，完善技术规格说明 |
 | [tech-blog](skills/tech-blog/) | 撰写带源码分析的技术博客 |
 | [tech-design-doc](skills/tech-design-doc/) | 生成结构化的技术设计文档 |
 
+## 安装方法
+
+### Linux/macOS
+
+```bash
+git clone https://github.com/anthropics/my-claude-skills.git
+cd my-claude-skills
+
+# 安装所有技能到 Claude
+./install.sh install-all
+
+# 或安装到 Codex
+./install.sh --target=codex install-all
+
+# 更新全局 CLAUDE.md
+./install.sh prompt-update
+```
+
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/anthropics/my-claude-skills.git
+cd my-claude-skills
+
+# 安装所有技能到 Claude
+.\install.ps1 install-all
+
+# 或安装到 Codex
+.\install.ps1 -Target codex install-all
+
+# 更新全局 CLAUDE.md
+.\install.ps1 prompt-update
+```
+
+## 命令说明
+
+### Linux/macOS (Bash)
+
+| 命令 | 描述 |
+|------|------|
+| `./install.sh list` | 列出所有可用技能 |
+| `./install.sh installed` | 列出已安装的技能 |
+| `./install.sh install <skill> [skill2...]` | 安装指定技能 |
+| `./install.sh install-all` | 安装所有技能 |
+| `./install.sh interactive` | 交互式技能选择 |
+| `./install.sh prompt-diff` | 显示本地与全局 CLAUDE.md 的差异 |
+| `./install.sh prompt-update` | 同步 CLAUDE.md 到 ~/.claude/ |
+| `./install.sh --target=codex <command>` | 以 Codex 为目标执行命令 |
+
+### Windows (PowerShell)
+
+| 命令 | 描述 |
+|------|------|
+| `.\install.ps1 list` | 列出所有可用技能 |
+| `.\install.ps1 installed` | 列出已安装的技能 |
+| `.\install.ps1 install <skill> [skill2...]` | 安装指定技能 |
+| `.\install.ps1 install-all` | 安装所有技能 |
+| `.\install.ps1 interactive` | 交互式技能选择 |
+| `.\install.ps1 prompt-diff` | 显示本地与全局 CLAUDE.md 的差异 |
+| `.\install.ps1 prompt-update` | 同步 CLAUDE.md 到 ~/.claude/ |
+| `.\install.ps1 -Target codex <command>` | 以 Codex 为目标执行命令 |
+
 ## 项目结构
 
 ```
 .
-├── install.sh              # 技能安装和提示词同步工具
-├── install.ps1             # Windows PowerShell 安装脚本
+├── install.sh              # Bash 安装脚本 (Linux/macOS)
+├── install.ps1             # PowerShell 安装脚本 (Windows)
 ├── prompts/
 │   ├── CLAUDE.md           # 全局工作流配置
 │   └── TRANSLATE.md        # 翻译指南
 └── skills/
     └── <skill-name>/
-        └── SKILL.md        # 技能定义和说明
+        ├── SKILL.md        # 技能定义（必需）
+        ├── config/         # 配置模板（可选）
+        ├── tips/           # 使用提示（可选）
+        ├── references/     # 参考文档（可选）
+        ├── scripts/        # 辅助脚本（可选）
+        └── cookbook/       # 代码示例（可选）
 ```
 
 ## 提示词说明
@@ -60,34 +145,64 @@ Claude Code 技能和提示词集合，用于增强 AI 辅助开发工作流。
 - 保留代码、品牌名和通用技术术语
 - 对歧义术语添加标注
 
-## 安装方法
+## 贡献指南
 
-### Linux/macOS
+### 添加新技能
 
-```bash
-git clone https://github.com/user/my-claude-code-settings.git
-cd my-claude-code-settings
-./install.sh install-all
-./install.sh prompt-update
-```
+1. 在 `skills/` 下创建新目录：
+   ```bash
+   mkdir skills/my-new-skill
+   ```
 
-### Windows
+2. 创建包含 YAML frontmatter 的 `SKILL.md`：
+   ```yaml
+   ---
+   name: my-new-skill
+   description: 用于列表展示的简短描述
+   license: MIT  # 可选
+   ---
 
-```powershell
-git clone https://github.com/user/my-claude-code-settings.git
-cd my-claude-code-settings
-.\install.ps1
-```
+   # My New Skill
 
-## 命令说明
+   详细说明和文档...
+   ```
 
-```bash
-./install.sh list           # 列出可用技能
-./install.sh install <skill> # 安装指定技能
-./install.sh install-all    # 安装所有技能
-./install.sh prompt-diff    # 显示本地与全局 CLAUDE.md 的差异
-./install.sh prompt-update  # 同步 CLAUDE.md 到 ~/.claude/
-```
+3. （可选）添加辅助目录：
+   - `config/` - 配置模板
+   - `tips/` - 使用提示
+   - `references/` - 技术参考
+   - `scripts/` - 辅助脚本
+   - `cookbook/` - 代码示例
+
+4. 测试安装：
+   ```bash
+   ./install.sh install my-new-skill
+   ```
+
+### 贡献规范
+
+- 保持 `SKILL.md` 聚焦且可操作
+- 使用清晰简洁的语言
+- 适当添加示例
+- 遵循现有技能的模式以保持一致性
+
+## 常见问题
+
+**Q: Claude 和 Codex 目标有什么区别？**
+
+A: Claude 目标安装到 `~/.claude/skills/` 供 Claude Code 使用，Codex 目标安装到 `~/.codex/skills/` 供 OpenAI Codex CLI 使用。技能格式兼容两者。
+
+**Q: 如何更新已安装的技能？**
+
+A: 重新运行安装命令即可，会用最新版本覆盖现有技能。
+
+**Q: 可以使用多个来源的技能吗？**
+
+A: 可以。`installed` 命令会显示哪些技能来自本仓库，哪些来自外部。
+
+**Q: 更新 CLAUDE.md 时备份存储在哪里？**
+
+A: 备份创建在 `~/.claude/` 目录下，带有时间戳后缀，如 `CLAUDE.md.backup.20240115_143022`。
 
 ## 许可证
 
