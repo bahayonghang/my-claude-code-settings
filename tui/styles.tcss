@@ -1,0 +1,252 @@
+/* MyClaude Skills TUI 样式文件
+ * 
+ * 定义平台选择屏幕、主界面布局、列表项和状态消息的样式。
+ * Requirements: 3.4, 3.5, 13.3
+ */
+
+/* === 全局样式 === */
+Screen {
+    background: $surface;
+}
+
+/* === 平台选择屏幕样式 === */
+PlatformSelectScreen {
+    align: center middle;
+    background: $surface;
+}
+
+PlatformSelectScreen #container {
+    width: 60;
+    height: auto;
+    padding: 2 4;
+    border: round $primary;
+    background: $surface-lighten-1;
+}
+
+PlatformSelectScreen #title {
+    text-align: center;
+    text-style: bold;
+    padding: 1 0;
+    color: $primary;
+}
+
+PlatformSelectScreen #subtitle {
+    text-align: center;
+    color: $text-muted;
+    padding: 0 0 2 0;
+}
+
+PlatformSelectScreen #platform-list {
+    width: 100%;
+    height: auto;
+    border: round $primary;
+    padding: 1 2;
+    background: $surface;
+}
+
+PlatformSelectScreen #platform-list:focus {
+    border: round $accent;
+}
+
+PlatformSelectScreen #platform-list > .option-list--option-highlighted {
+    background: $primary;
+    color: $text;
+}
+
+PlatformSelectScreen #hint {
+    text-align: center;
+    color: $text-muted;
+    padding: 2 0 0 0;
+}
+
+/* === 主界面布局样式 === */
+MainScreen {
+    background: $surface;
+}
+
+MainScreen #main-container {
+    width: 100%;
+    height: 100%;
+}
+
+MainScreen #content-area {
+    width: 100%;
+    height: 1fr;
+    padding: 1 2;
+}
+
+MainScreen #search-container {
+    width: 100%;
+    height: 3;
+    padding: 0 2 1 2;
+}
+
+MainScreen #search-container.-hidden {
+    display: none;
+}
+
+MainScreen #search-input {
+    width: 100%;
+    border: round $primary;
+}
+
+MainScreen #search-input:focus {
+    border: round $accent;
+}
+
+MainScreen TabbedContent {
+    height: 1fr;
+}
+
+MainScreen TabPane {
+    padding: 1;
+}
+
+/* === Header 样式 === */
+Header {
+    dock: top;
+    height: 3;
+    background: $primary;
+    padding: 0 2;
+}
+
+Header #header-container {
+    width: 100%;
+    height: 100%;
+}
+
+Header #app-title {
+    content-align: left middle;
+    width: 1fr;
+    text-style: bold;
+    color: $text;
+}
+
+Header #platform-badge {
+    content-align: right middle;
+    width: auto;
+    background: $secondary;
+    padding: 0 2;
+    color: $text;
+}
+
+/* === Footer 样式 === */
+Footer {
+    dock: bottom;
+    height: 3;
+    background: $surface-darken-1;
+    padding: 0 2;
+}
+
+Footer #footer-container {
+    width: 100%;
+    height: 100%;
+}
+
+Footer #status-message {
+    content-align: left middle;
+    width: 1fr;
+}
+
+Footer #selection-count {
+    content-align: right middle;
+    width: auto;
+    padding: 0 2;
+    color: $accent;
+}
+
+/* === 状态消息样式 (success/warning/error) === */
+Footer .status-info {
+    color: $text;
+}
+
+Footer .status-success {
+    color: $success;
+}
+
+Footer .status-warning {
+    color: $warning;
+}
+
+Footer .status-error {
+    color: $error;
+}
+
+/* === 列表项样式 === */
+ItemListView {
+    height: 1fr;
+    border: round $primary;
+    background: $surface;
+}
+
+ItemListView:focus {
+    border: round $accent;
+}
+
+/* 可选择列表项 */
+SelectableItem {
+    height: 3;
+    padding: 0 1;
+    background: $surface;
+}
+
+SelectableItem:hover {
+    background: $surface-lighten-1;
+}
+
+SelectableItem.-selected {
+    background: $primary-lighten-3;
+}
+
+SelectableItem:focus {
+    background: $surface-lighten-2;
+}
+
+SelectableItem.-selected:focus {
+    background: $primary-lighten-2;
+}
+
+/* 列表项内部元素 */
+SelectableItem #item-container {
+    width: 100%;
+    height: 100%;
+}
+
+SelectableItem #checkbox {
+    width: 4;
+    content-align: center middle;
+}
+
+SelectableItem #status {
+    width: 3;
+    content-align: center middle;
+}
+
+/* 已安装状态 - 绿色对勾 */
+SelectableItem .status-installed {
+    color: $success;
+}
+
+/* 未安装状态 - 灰色圆圈 */
+SelectableItem .status-not-installed {
+    color: $text-muted;
+}
+
+SelectableItem #name {
+    width: 1fr;
+    text-style: bold;
+    content-align: left middle;
+}
+
+SelectableItem #desc {
+    width: 2fr;
+    color: $text-muted;
+    content-align: left middle;
+}
+
+/* === 空列表提示 === */
+.empty-list-message {
+    text-align: center;
+    color: $text-muted;
+    padding: 4;
+}
