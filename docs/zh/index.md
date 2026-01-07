@@ -30,5 +30,5 @@ features:
     details: 一致的 SKILL.md 格式，便于扩展和维护。
   - icon: 🔄
     title: 跨平台支持
-    details: 同时支持 Bash (Linux/macOS) 和 PowerShell (Windows) 安装脚本。
+    details: 统一的 Python 安装脚本 (`install.py`)，随处可用。
 ---

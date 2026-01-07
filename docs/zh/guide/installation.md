@@ -3,8 +3,8 @@
 ## 前置要求
 
 - Git
-- Bash (Linux/macOS) 或 PowerShell (Windows)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Codex CLI](https://github.com/openai/codex)
+- Python 3.6+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), 或 [Gemini CLI](https://geminicli.com)
 
 ## 克隆仓库
 
@@ -13,58 +13,84 @@ git clone https://github.com/anthropics/my-claude-skills.git
 cd my-claude-skills
 ```
 
-## Linux/macOS
+## 基础用法
 
 ### 安装所有技能
 
 ```bash
-./install.sh install-all
+# 默认目标是 Claude
+python3 install.py install-all
 ```
 
-### 安装到 Codex
+### 安装到指定目标
 
 ```bash
-./install.sh --target=codex install-all
+# 安装到 Gemini
+python3 install.py --target gemini install-all
+
+# 安装到 Codex
+python3 install.py --target codex install-all
 ```
 
 ### 更新全局提示词
 
 ```bash
-./install.sh prompt-update
+python3 install.py prompt-update
 ```
 
-## Windows (PowerShell)
+### 交互模式
 
-### 安装所有技能
-
-```powershell
-.\install.ps1 install-all
+```bash
+python3 install.py interactive
 ```
 
-### 安装到 Codex
+## TUI 模式 (推荐)
 
-```powershell
-.\install.ps1 -Target codex install-all
+如需现代化的可视化体验，可使用 TUI (终端用户界面)：
+
+```bash
+python3 install_tui.py
 ```
 
-### 更新全局提示词
+### 功能特性
 
-```powershell
-.\install.ps1 prompt-update
+- 🎯 可视化平台选择 (Claude/Codex/Gemini)
+- 📋 Skills 和 Commands 双标签页界面
+- ⌨️ 键盘快捷键快速操作
+- 🔍 实时搜索过滤
+- ✅ 多选批量安装
+
+### 键盘快捷键
+
+| 按键 | 功能 |
+|------|------|
+| `Tab` | 切换 Skills/Commands 标签页 |
+| `i` / `Enter` | 安装当前聚焦项 |
+| `Space` | 切换选择状态 |
+| `s` | 安装选中项 |
+| `a` | 安装全部 |
+| `Ctrl+A` | 全选 |
+| `Ctrl+D` | 取消全选 |
+| `/` | 搜索 |
+| `t` | 切换平台 |
+| `q` | 退出 |
+
+### 依赖要求
+
+- Python 3.10+
+- [Textual](https://textual.textualize.io/) 库
+
+```bash
+pip install textual
 ```
 
 ## 验证安装
 
 检查已安装的技能：
 
-::: code-group
-```bash [Linux/macOS]
-./install.sh installed
+```bash
+python3 install.py installed
 ```
-```powershell [Windows]
-.\install.ps1 installed
-```
-:::
 
 ## 安装路径
 
@@ -72,3 +98,4 @@ cd my-claude-skills
 |------|------|
 | Claude | `~/.claude/skills/` |
 | Codex | `~/.codex/skills/` |
+| Gemini | `~/.gemini/skills/` |

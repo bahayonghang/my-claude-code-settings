@@ -8,15 +8,15 @@ A curated collection of Claude Code skills and prompts for enhanced AI-assisted 
 
 - 🎯 Reusable AI skill modules covering frontend design, research, documentation, and more
 - 📦 Unified skill format (`SKILL.md`) for easy extension and maintenance
-- 🔄 Cross-platform installation scripts (Bash + PowerShell)
-- 🎛️ Dual target support: Claude Code (`~/.claude/`) and Codex CLI (`~/.codex/`)
+- 🔄 Cross-platform Python installation script (`install.py`)
+- 🎛️ Multi-target support: Claude Code (`~/.claude/`), Codex CLI (`~/.codex/`), and Gemini CLI (`~/.gemini/`)
 - ⚡ Slash commands for common workflows (git commit, etc.)
 
 ## Prerequisites
 
 - Git
-- Bash (Linux/macOS) or PowerShell (Windows)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex CLI](https://github.com/openai/codex)
+- Python 3.6+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), or [Gemini CLI](https://geminicli.com)
 
 ## Quick Start
 
@@ -26,13 +26,16 @@ git clone https://github.com/anthropics/my-claude-skills.git
 cd my-claude-skills
 
 # Install all skills
-./install.sh install-all
+python3 install.py install-all
 
 # Update global prompt configuration
-./install.sh prompt-update
+python3 install.py prompt-update
+
+# Or use the TUI for interactive management
+python3 install_tui.py
 ```
 
-Run `./install.sh help` for more options.
+Run `python3 install.py --help` for more options.
 
 ## Skills
 
@@ -45,7 +48,7 @@ Run `./install.sh help` for more options.
 | [gemini-image](skills/gemini-image/) | AI image generation via Gemini API (text-to-image, image-to-image) |
 | [research](skills/research/) | Technical research with web search and citation support |
 | [spec-interview](skills/spec-interview/) | Deep interview to refine technical specs through systematic questioning |
-| [paper-replication](skills/paper-replication/) | Replicate deep learning papers into industrial-grade PyTorch code |
+| [paper-replication](skills/paper-replication/) | Replicate deep learning papers into industrial-grade PyTorch code with detailed module documentation |
 | [tech-blog](skills/tech-blog/) | Write technical blog posts with source code analysis |
 | [tech-design-doc](skills/tech-design-doc/) | Generate structured technical design documents |
 
@@ -74,72 +77,75 @@ Inspired by [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode), th
 
 ## Installation
 
-### Linux/macOS
+### Basic Installation
 
 ```bash
 git clone https://github.com/anthropics/my-claude-skills.git
 cd my-claude-skills
 
-# Install all skills to Claude
-./install.sh install-all
+# Install all skills to Claude (default)
+python3 install.py install-all
 
-# Or install to Codex
-./install.sh --target=codex install-all
+# Install to Gemini
+python3 install.py --target gemini install-all
 
-# Update global CLAUDE.md
-./install.sh prompt-update
-```
-
-### Windows (PowerShell)
-
-```powershell
-git clone https://github.com/anthropics/my-claude-skills.git
-cd my-claude-skills
-
-# Install all skills to Claude
-.\install.ps1 install-all
-
-# Or install to Codex
-.\install.ps1 -Target codex install-all
+# Install to Codex
+python3 install.py --target codex install-all
 
 # Update global CLAUDE.md
-.\install.ps1 prompt-update
+python3 install.py prompt-update
 ```
 
 ## Commands
 
-### Linux/macOS (Bash)
-
 | Command | Description |
 |---------|-------------|
-| `./install.sh list` | List all available skills |
-| `./install.sh installed` | List currently installed skills |
-| `./install.sh install <skill> [skill2...]` | Install specific skill(s) |
-| `./install.sh install-all` | Install all skills |
-| `./install.sh interactive` | Interactive skill selection |
-| `./install.sh prompt-diff` | Show diff between local and global CLAUDE.md |
-| `./install.sh prompt-update` | Sync CLAUDE.md to ~/.claude/ |
-| `./install.sh --target=codex <command>` | Run command targeting Codex |
+| `python3 install.py list` | List all available skills |
+| `python3 install.py installed` | List currently installed skills |
+| `python3 install.py install <skill> [skill2...]` | Install specific skill(s) |
+| `python3 install.py install-all` | Install all skills |
+| `python3 install.py interactive` | Interactive skill selection |
+| `python3 install.py prompt-diff` | Show diff between local and global CLAUDE.md |
+| `python3 install.py prompt-update` | Sync CLAUDE.md to ~/.claude/ |
+| `python3 install.py --target gemini <command>` | Run command targeting Gemini |
 
-### Windows (PowerShell)
+### TUI Mode (Recommended)
 
-| Command | Description |
-|---------|-------------|
-| `.\install.ps1 list` | List all available skills |
-| `.\install.ps1 installed` | List currently installed skills |
-| `.\install.ps1 install <skill> [skill2...]` | Install specific skill(s) |
-| `.\install.ps1 install-all` | Install all skills |
-| `.\install.ps1 interactive` | Interactive skill selection |
-| `.\install.ps1 prompt-diff` | Show diff between local and global CLAUDE.md |
-| `.\install.ps1 prompt-update` | Sync CLAUDE.md to ~/.claude/ |
-| `.\install.ps1 -Target codex <command>` | Run command targeting Codex |
+For a more user-friendly experience, use the TUI (Terminal User Interface):
+
+```bash
+python3 install_tui.py
+```
+
+The TUI provides:
+- 🎯 Visual platform selection (Claude/Codex/Gemini)
+- 📋 Tabbed interface for Skills and Commands
+- ⌨️ Keyboard shortcuts for quick operations
+- 🔍 Real-time search filtering
+- ✅ Multi-select batch installation
+
+**TUI Keyboard Shortcuts:**
+
+| Key | Action |
+|-----|--------|
+| `Tab` | Switch between Skills/Commands tabs |
+| `i` / `Enter` | Install focused item |
+| `Space` | Toggle selection |
+| `s` | Install selected items |
+| `a` | Install all items |
+| `Ctrl+A` | Select all |
+| `Ctrl+D` | Deselect all |
+| `/` | Search |
+| `t` | Switch platform |
+| `q` | Quit |
+
+**Requirements:** Python 3.10+ and [Textual](https://textual.textualize.io/) library (`pip install textual`)
 
 ## Project Structure
 
 ```
 .
-├── install.sh              # Bash installer (Linux/macOS)
-├── install.ps1             # PowerShell installer (Windows)
+├── install.py              # Unified Python installer
 ├── prompts/
 │   ├── CLAUDE.md           # Global workflow configuration
 │   └── TRANSLATE.md        # Translation guidelines
@@ -215,9 +221,12 @@ Technical content translation guidelines:
 
 ## FAQ
 
-**Q: What's the difference between Claude and Codex targets?**
+**Q: What's the difference between Claude, Codex, and Gemini targets?**
 
-A: Claude target installs to `~/.claude/skills/` for Claude Code, while Codex target installs to `~/.codex/skills/` for OpenAI Codex CLI. The skill format is compatible with both.
+A: The target determines the installation directory:
+- Claude: `~/.claude/skills/` (default)
+- Codex: `~/.codex/skills/`
+- Gemini: `~/.gemini/skills/`
 
 **Q: How do I update an existing skill?**
 

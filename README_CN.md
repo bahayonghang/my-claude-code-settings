@@ -8,15 +8,15 @@ Claude Code 技能和提示词集合，用于增强 AI 辅助开发工作流。
 
 - 🎯 可复用的 AI 技能模块，覆盖前端设计、技术研究、文档生成等场景
 - 📦 统一的技能定义格式（`SKILL.md`），便于扩展和维护
-- 🔄 跨平台安装脚本（Bash + PowerShell）
-- 🎛️ 双目标支持：Claude Code (`~/.claude/`) 和 Codex CLI (`~/.codex/`)
+- 🔄 跨平台 Python 安装脚本 (`install.py`)
+- 🎛️ 多目标支持：Claude Code (`~/.claude/`), Codex CLI (`~/.codex/`), 和 Gemini CLI (`~/.gemini/`)
 - ⚡ 斜杠命令，用于常见工作流（git commit 等）
 
 ## 前置要求
 
 - Git
-- Bash (Linux/macOS) 或 PowerShell (Windows)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Codex CLI](https://github.com/openai/codex)
+- Python 3.6+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), 或 [Gemini CLI](https://geminicli.com)
 
 ## 快速开始
 
@@ -26,13 +26,16 @@ git clone https://github.com/anthropics/my-claude-skills.git
 cd my-claude-skills
 
 # 安装所有技能
-./install.sh install-all
+python3 install.py install-all
 
 # 更新全局提示词配置
-./install.sh prompt-update
+python3 install.py prompt-update
+
+# 或使用 TUI 进行交互式管理
+python3 install_tui.py
 ```
 
-运行 `./install.sh help` 查看更多选项。
+运行 `python3 install.py --help` 查看更多选项。
 
 ## 技能列表
 
@@ -45,7 +48,7 @@ cd my-claude-skills
 | [gemini-image](skills/gemini-image/) | 通过 Gemini API 生成图像（文生图、图生图） |
 | [research](skills/research/) | 技术研究，支持网络搜索和引用 |
 | [spec-interview](skills/spec-interview/) | 通过系统性提问深度访谈，完善技术规格说明 |
-| [paper-replication](skills/paper-replication/) | 将深度学习论文复现为工业级 PyTorch 代码 |
+| [paper-replication](skills/paper-replication/) | 将深度学习论文复现为工业级 PyTorch 代码，含详细模块文档 |
 | [tech-blog](skills/tech-blog/) | 撰写带源码分析的技术博客 |
 | [tech-design-doc](skills/tech-design-doc/) | 生成结构化的技术设计文档 |
 
@@ -74,72 +77,75 @@ cd my-claude-skills
 
 ## 安装方法
 
-### Linux/macOS
+### 基础安装
 
 ```bash
 git clone https://github.com/anthropics/my-claude-skills.git
 cd my-claude-skills
 
-# 安装所有技能到 Claude
-./install.sh install-all
+# 安装所有技能到 Claude (默认)
+python3 install.py install-all
 
-# 或安装到 Codex
-./install.sh --target=codex install-all
+# 安装到 Gemini
+python3 install.py --target gemini install-all
 
-# 更新全局 CLAUDE.md
-./install.sh prompt-update
-```
-
-### Windows (PowerShell)
-
-```powershell
-git clone https://github.com/anthropics/my-claude-skills.git
-cd my-claude-skills
-
-# 安装所有技能到 Claude
-.\install.ps1 install-all
-
-# 或安装到 Codex
-.\install.ps1 -Target codex install-all
+# 安装到 Codex
+python3 install.py --target codex install-all
 
 # 更新全局 CLAUDE.md
-.\install.ps1 prompt-update
+python3 install.py prompt-update
 ```
 
 ## 命令说明
 
-### Linux/macOS (Bash)
-
 | 命令 | 描述 |
 |------|------|
-| `./install.sh list` | 列出所有可用技能 |
-| `./install.sh installed` | 列出已安装的技能 |
-| `./install.sh install <skill> [skill2...]` | 安装指定技能 |
-| `./install.sh install-all` | 安装所有技能 |
-| `./install.sh interactive` | 交互式技能选择 |
-| `./install.sh prompt-diff` | 显示本地与全局 CLAUDE.md 的差异 |
-| `./install.sh prompt-update` | 同步 CLAUDE.md 到 ~/.claude/ |
-| `./install.sh --target=codex <command>` | 以 Codex 为目标执行命令 |
+| `python3 install.py list` | 列出所有可用技能 |
+| `python3 install.py installed` | 列出已安装的技能 |
+| `python3 install.py install <skill> [skill2...]` | 安装指定技能 |
+| `python3 install.py install-all` | 安装所有技能 |
+| `python3 install.py interactive` | 交互式技能选择 |
+| `python3 install.py prompt-diff` | 显示本地与全局 CLAUDE.md 的差异 |
+| `python3 install.py prompt-update` | 同步 CLAUDE.md 到 ~/.claude/ |
+| `python3 install.py --target gemini <command>` | 以 Gemini 为目标执行命令 |
 
-### Windows (PowerShell)
+### TUI 模式 (推荐)
 
-| 命令 | 描述 |
+如需更友好的交互体验，可使用 TUI (终端用户界面)：
+
+```bash
+python3 install_tui.py
+```
+
+TUI 提供以下功能：
+- 🎯 可视化平台选择 (Claude/Codex/Gemini)
+- 📋 Skills 和 Commands 双标签页界面
+- ⌨️ 键盘快捷键快速操作
+- 🔍 实时搜索过滤
+- ✅ 多选批量安装
+
+**TUI 键盘快捷键：**
+
+| 按键 | 功能 |
 |------|------|
-| `.\install.ps1 list` | 列出所有可用技能 |
-| `.\install.ps1 installed` | 列出已安装的技能 |
-| `.\install.ps1 install <skill> [skill2...]` | 安装指定技能 |
-| `.\install.ps1 install-all` | 安装所有技能 |
-| `.\install.ps1 interactive` | 交互式技能选择 |
-| `.\install.ps1 prompt-diff` | 显示本地与全局 CLAUDE.md 的差异 |
-| `.\install.ps1 prompt-update` | 同步 CLAUDE.md 到 ~/.claude/ |
-| `.\install.ps1 -Target codex <command>` | 以 Codex 为目标执行命令 |
+| `Tab` | 切换 Skills/Commands 标签页 |
+| `i` / `Enter` | 安装当前聚焦项 |
+| `Space` | 切换选择状态 |
+| `s` | 安装选中项 |
+| `a` | 安装全部 |
+| `Ctrl+A` | 全选 |
+| `Ctrl+D` | 取消全选 |
+| `/` | 搜索 |
+| `t` | 切换平台 |
+| `q` | 退出 |
+
+**依赖要求：** Python 3.10+ 和 [Textual](https://textual.textualize.io/) 库 (`pip install textual`)
 
 ## 项目结构
 
 ```
 .
-├── install.sh              # Bash 安装脚本 (Linux/macOS)
-├── install.ps1             # PowerShell 安装脚本 (Windows)
+├── install.py              # 统一 Python 安装脚本
 ├── prompts/
 │   ├── CLAUDE.md           # 全局工作流配置
 │   └── TRANSLATE.md        # 翻译指南
@@ -215,9 +221,12 @@ cd my-claude-skills
 
 ## 常见问题
 
-**Q: Claude 和 Codex 目标有什么区别？**
+**Q: Claude, Codex 和 Gemini 目标有什么区别？**
 
-A: Claude 目标安装到 `~/.claude/skills/` 供 Claude Code 使用，Codex 目标安装到 `~/.codex/skills/` 供 OpenAI Codex CLI 使用。技能格式兼容两者。
+A: 目标决定了技能安装的目录：
+- Claude: `~/.claude/skills/` (默认)
+- Codex: `~/.codex/skills/`
+- Gemini: `~/.gemini/skills/`
 
 **Q: 如何更新已安装的技能？**
 

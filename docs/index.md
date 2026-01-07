@@ -30,5 +30,5 @@ features:
     details: Consistent SKILL.md format for easy extension and maintenance.
   - icon: 🔄
     title: Cross-Platform
-    details: Installation scripts for both Bash (Linux/macOS) and PowerShell (Windows).
+    details: Single Python installation script (`install.py`) that works everywhere.
 ---

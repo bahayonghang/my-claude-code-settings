@@ -3,8 +3,8 @@
 ## Prerequisites
 
 - Git
-- Bash (Linux/macOS) or PowerShell (Windows)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex CLI](https://github.com/openai/codex)
+- Python 3.6+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), or [Gemini CLI](https://geminicli.com)
 
 ## Clone Repository
 
@@ -13,58 +13,84 @@ git clone https://github.com/anthropics/my-claude-skills.git
 cd my-claude-skills
 ```
 
-## Linux/macOS
+## Basic Usage
 
 ### Install All Skills
 
 ```bash
-./install.sh install-all
+# Default target is Claude
+python3 install.py install-all
 ```
 
-### Install to Codex
+### Install to Specific Target
 
 ```bash
-./install.sh --target=codex install-all
+# Install to Gemini
+python3 install.py --target gemini install-all
+
+# Install to Codex
+python3 install.py --target codex install-all
 ```
 
 ### Update Global Prompt
 
 ```bash
-./install.sh prompt-update
+python3 install.py prompt-update
 ```
 
-## Windows (PowerShell)
+### Interactive Mode
 
-### Install All Skills
-
-```powershell
-.\install.ps1 install-all
+```bash
+python3 install.py interactive
 ```
 
-### Install to Codex
+## TUI Mode (Recommended)
 
-```powershell
-.\install.ps1 -Target codex install-all
+For a modern, visual experience, use the TUI (Terminal User Interface):
+
+```bash
+python3 install_tui.py
 ```
 
-### Update Global Prompt
+### Features
 
-```powershell
-.\install.ps1 prompt-update
+- 🎯 Visual platform selection (Claude/Codex/Gemini)
+- 📋 Tabbed interface for Skills and Commands
+- ⌨️ Keyboard shortcuts for quick operations
+- 🔍 Real-time search filtering
+- ✅ Multi-select batch installation
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Tab` | Switch between Skills/Commands tabs |
+| `i` / `Enter` | Install focused item |
+| `Space` | Toggle selection |
+| `s` | Install selected items |
+| `a` | Install all items |
+| `Ctrl+A` | Select all |
+| `Ctrl+D` | Deselect all |
+| `/` | Search |
+| `t` | Switch platform |
+| `q` | Quit |
+
+### Requirements
+
+- Python 3.10+
+- [Textual](https://textual.textualize.io/) library
+
+```bash
+pip install textual
 ```
 
 ## Verify Installation
 
 Check installed skills:
 
-::: code-group
-```bash [Linux/macOS]
-./install.sh installed
+```bash
+python3 install.py installed
 ```
-```powershell [Windows]
-.\install.ps1 installed
-```
-:::
 
 ## Installation Paths
 
@@ -72,3 +98,4 @@ Check installed skills:
 |--------|------|
 | Claude | `~/.claude/skills/` |
 | Codex | `~/.codex/skills/` |
+| Gemini | `~/.gemini/skills/` |
