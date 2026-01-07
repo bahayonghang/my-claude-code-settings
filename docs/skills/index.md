@@ -13,6 +13,7 @@ MyClaude Skills provides a collection of specialized AI skills for different dev
 | [gemini-image](./gemini-image) | Design | AI image generation via Gemini API |
 | [research](./research) | Research | Technical research with citations |
 | [spec-interview](./spec-interview) | Planning | Refine specs through systematic questioning |
+| [paper-replication](./paper-replication) | Development | Replicate deep learning papers to PyTorch |
 | [tech-blog](./tech-blog) | Documentation | Write technical blog posts |
 | [tech-design-doc](./tech-design-doc) | Documentation | Generate technical design documents |
 
@@ -28,6 +29,7 @@ Skills for creating visual assets and interfaces:
 ### Development Skills
 Skills for code analysis and generation:
 - **codex** - Deep code analysis with Codex CLI
+- **paper-replication** - Deep learning paper to PyTorch code
 
 ### Research Skills
 Skills for gathering and organizing information:

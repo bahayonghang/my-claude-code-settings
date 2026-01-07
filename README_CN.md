@@ -44,6 +44,7 @@ cd my-claude-skills
 | [gemini-image](skills/gemini-image/) | 通过 Gemini API 生成图像（文生图、图生图） |
 | [research](skills/research/) | 技术研究，支持网络搜索和引用 |
 | [spec-interview](skills/spec-interview/) | 通过系统性提问深度访谈，完善技术规格说明 |
+| [paper-replication](skills/paper-replication/) | 将深度学习论文复现为工业级 PyTorch 代码 |
 | [tech-blog](skills/tech-blog/) | 撰写带源码分析的技术博客 |
 | [tech-design-doc](skills/tech-design-doc/) | 生成结构化的技术设计文档 |
 

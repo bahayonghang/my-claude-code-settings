@@ -11,6 +11,7 @@ MyClaude Skills 提供一系列专门的 AI 技能，用于不同的开发任务
 | [excalidraw](./excalidraw) | 设计 | 创建手绘风格图表 |
 | [frontend-design](./frontend-design) | 设计 | 构建独特的前端界面 |
 | [gemini-image](./gemini-image) | 设计 | 通过 Gemini API 生成图像 |
+| [paper-replication](./paper-replication) | 开发 | 将深度学习论文复现为 PyTorch 代码 |
 | [research](./research) | 研究 | 技术研究，支持引用 |
 | [spec-interview](./spec-interview) | 规划 | 通过系统性提问完善规格说明 |
 | [tech-blog](./tech-blog) | 文档 | 撰写技术博客 |
@@ -28,6 +29,7 @@ MyClaude Skills 提供一系列专门的 AI 技能，用于不同的开发任务
 ### 开发类技能
 用于代码分析和生成：
 - **codex** - 使用 Codex CLI 进行深度代码分析
+- **paper-replication** - 深度学习论文复现为 PyTorch 代码
 
 ### 研究类技能
 用于收集和组织信息：
