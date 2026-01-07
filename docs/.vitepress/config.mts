@@ -12,6 +12,7 @@ export default defineConfig({
         nav: [
           { text: 'Guide', link: '/guide/' },
           { text: 'Skills', link: '/skills/' },
+          { text: 'Commands', link: '/commands/' },
           { text: 'GitHub', link: 'https://github.com/anthropics/my-claude-skills' }
         ],
         sidebar: {
@@ -28,7 +29,9 @@ export default defineConfig({
               text: 'Advanced',
               items: [
                 { text: 'Creating Skills', link: '/guide/creating-skills' },
-                { text: 'Prompts', link: '/guide/prompts' }
+                { text: 'Prompts', link: '/guide/prompts' },
+                { text: 'Plugins', link: '/guide/plugins' },
+                { text: 'OMO Agents Tutorial', link: '/guide/omo-agents-tutorial' }
               ]
             }
           ],
@@ -48,6 +51,28 @@ export default defineConfig({
                 { text: 'tech-blog', link: '/skills/tech-blog' },
                 { text: 'tech-design-doc', link: '/skills/tech-design-doc' }
               ]
+            },
+            {
+              text: 'OMO Agents (Multi-Agent)',
+              items: [
+                { text: 'omo-agents', link: '/skills/omo-agents' },
+                { text: 'sisyphus', link: '/skills/sisyphus' },
+                { text: 'oracle', link: '/skills/oracle' },
+                { text: 'explore', link: '/skills/explore' },
+                { text: 'librarian', link: '/skills/librarian' },
+                { text: 'frontend-engineer', link: '/skills/frontend-engineer' },
+                { text: 'document-writer', link: '/skills/document-writer' },
+                { text: 'multimodal-looker', link: '/skills/multimodal-looker' }
+              ]
+            }
+          ],
+          '/commands/': [
+            {
+              text: 'Commands',
+              items: [
+                { text: 'Overview', link: '/commands/' },
+                { text: 'git-commit', link: '/commands/git-commit' }
+              ]
             }
           ]
         }
@@ -61,6 +86,7 @@ export default defineConfig({
         nav: [
           { text: '指南', link: '/zh/guide/' },
           { text: '技能', link: '/zh/skills/' },
+          { text: '命令', link: '/zh/commands/' },
           { text: 'GitHub', link: 'https://github.com/anthropics/my-claude-skills' }
         ],
         sidebar: {
@@ -77,7 +103,9 @@ export default defineConfig({
               text: '进阶',
               items: [
                 { text: '创建技能', link: '/zh/guide/creating-skills' },
-                { text: '提示词', link: '/zh/guide/prompts' }
+                { text: '提示词', link: '/zh/guide/prompts' },
+                { text: '插件', link: '/zh/guide/plugins' },
+                { text: 'OMO Agents 教程', link: '/zh/guide/omo-agents-tutorial' }
               ]
             }
           ],
@@ -96,6 +124,28 @@ export default defineConfig({
                 { text: 'spec-interview', link: '/zh/skills/spec-interview' },
                 { text: 'tech-blog', link: '/zh/skills/tech-blog' },
                 { text: 'tech-design-doc', link: '/zh/skills/tech-design-doc' }
+              ]
+            },
+            {
+              text: 'OMO Agents (多代理系统)',
+              items: [
+                { text: 'omo-agents', link: '/zh/skills/omo-agents' },
+                { text: 'sisyphus', link: '/zh/skills/sisyphus' },
+                { text: 'oracle', link: '/zh/skills/oracle' },
+                { text: 'explore', link: '/zh/skills/explore' },
+                { text: 'librarian', link: '/zh/skills/librarian' },
+                { text: 'frontend-engineer', link: '/zh/skills/frontend-engineer' },
+                { text: 'document-writer', link: '/zh/skills/document-writer' },
+                { text: 'multimodal-looker', link: '/zh/skills/multimodal-looker' }
+              ]
+            }
+          ],
+          '/zh/commands/': [
+            {
+              text: '命令列表',
+              items: [
+                { text: '概览', link: '/zh/commands/' },
+                { text: 'git-commit', link: '/zh/commands/git-commit' }
               ]
             }
           ]
