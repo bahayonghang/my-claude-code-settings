@@ -395,6 +395,503 @@ if __name__ == "__main__":
 
 ---
 
+### Phase 4: 模块文档生成 (Module Documentation)
+
+在完成代码实现后，必须为每个核心模块生成详细的技术文档。
+
+#### 4.1 文档结构要求
+
+每个模块文档必须包含以下部分：
+
+```markdown
+# [模块名称] 技术文档
+
+## 1. 模块概述
+- 功能描述
+- 在整体架构中的位置
+- 输入输出规格
+
+## 2. 数学原理
+- 核心公式 (LaTeX)
+- 符号说明表
+- 公式推导过程 (如适用)
+
+## 3. 数据流图
+- Mermaid 流程图
+- 张量形状变化追踪
+
+## 4. 实现细节
+- 关键代码片段
+- 超参数说明
+- 设计决策说明
+
+## 5. 使用示例
+- 代码示例
+- 输入输出示例
+
+## 6. 注意事项
+- 常见问题
+- 性能考量
+- 与论文的差异 (如有)
+```
+
+#### 4.2 Mermaid 流程图规范
+
+##### 4.2.1 模块内部流程图
+
+展示模块内部的详细数据流：
+
+```markdown
+## 数据流图
+
+### 整体流程
+
+```mermaid
+flowchart TB
+    subgraph Input["输入层"]
+        I[输入张量<br/>B, C_in, H, W]
+    end
+
+    subgraph Process["处理流程"]
+        direction TB
+        P1[步骤1: 特征提取<br/>B, C_mid, H, W]
+        P2[步骤2: 变换操作<br/>B, C_mid, H', W']
+        P3[步骤3: 特征融合<br/>B, C_out, H', W']
+    end
+
+    subgraph Output["输出层"]
+        O[输出张量<br/>B, C_out, H', W']
+    end
+
+    I --> P1 --> P2 --> P3 --> O
+
+    style I fill:#e1f5fe,stroke:#01579b
+    style P1 fill:#fff3e0,stroke:#e65100
+    style P2 fill:#fff3e0,stroke:#e65100
+    style P3 fill:#fff3e0,stroke:#e65100
+    style O fill:#e8f5e9,stroke:#2e7d32
+```
+```
+
+##### 4.2.2 张量形状变化图
+
+专门展示张量维度的变化过程：
+
+```markdown
+### 张量形状变化
+
+```mermaid
+flowchart LR
+    subgraph Shapes["维度变化追踪"]
+        S1["[B, 3, 224, 224]"]
+        S2["[B, 64, 112, 112]"]
+        S3["[B, 64, 56, 56]"]
+        S4["[B, 256, 56, 56]"]
+        S5["[B, 512, 28, 28]"]
+    end
+
+    S1 -->|"Conv 7×7, s=2"| S2
+    S2 -->|"MaxPool 3×3, s=2"| S3
+    S3 -->|"Bottleneck ×3"| S4
+    S4 -->|"Bottleneck ×4, s=2"| S5
+
+    style S1 fill:#e3f2fd
+    style S2 fill:#e8f5e9
+    style S3 fill:#fff3e0
+    style S4 fill:#fce4ec
+    style S5 fill:#f3e5f5
+```
+```
+
+##### 4.2.3 注意力机制流程图 (如适用)
+
+```markdown
+### 注意力计算流程
+
+```mermaid
+flowchart TB
+    subgraph Input
+        X[输入 X<br/>B, N, D]
+    end
+
+    subgraph QKV["Q, K, V 投影"]
+        Q[Query<br/>B, N, D]
+        K[Key<br/>B, N, D]
+        V[Value<br/>B, N, D]
+    end
+
+    subgraph Attention["注意力计算"]
+        A1["Q × K^T<br/>B, N, N"]
+        A2["Softmax<br/>B, N, N"]
+        A3["Attn × V<br/>B, N, D"]
+    end
+
+    subgraph Output
+        O[输出<br/>B, N, D]
+    end
+
+    X --> Q & K & V
+    Q & K --> A1
+    A1 -->|"÷ √d_k"| A2
+    A2 & V --> A3
+    A3 --> O
+
+    style X fill:#e1f5fe,stroke:#01579b
+    style Q fill:#fff3e0,stroke:#e65100
+    style K fill:#fff3e0,stroke:#e65100
+    style V fill:#fff3e0,stroke:#e65100
+    style A1 fill:#fce4ec,stroke:#c2185b
+    style A2 fill:#fce4ec,stroke:#c2185b
+    style A3 fill:#fce4ec,stroke:#c2185b
+    style O fill:#e8f5e9,stroke:#2e7d32
+```
+```
+
+##### 4.2.4 残差连接流程图
+
+```markdown
+### 残差连接结构
+
+```mermaid
+flowchart TB
+    subgraph Block["残差块"]
+        I[输入 x]
+        
+        subgraph Main["主路径 F(x)"]
+            M1[Layer 1]
+            M2[Layer 2]
+            M3[Layer 3]
+        end
+        
+        subgraph Skip["跳跃连接"]
+            S[Identity / Projection]
+        end
+        
+        Add((+))
+        O[输出 y = F(x) + x]
+    end
+
+    I --> M1 --> M2 --> M3 --> Add
+    I --> S --> Add
+    Add --> O
+
+    style I fill:#e1f5fe
+    style M1 fill:#fff3e0
+    style M2 fill:#fff3e0
+    style M3 fill:#fff3e0
+    style S fill:#fce4ec
+    style Add fill:#f3e5f5
+    style O fill:#e8f5e9
+```
+```
+
+#### 4.3 公式说明规范
+
+##### 4.3.1 核心公式格式
+
+```markdown
+## 数学原理
+
+### 核心公式
+
+**[公式名称]**:
+
+$$
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+$$
+
+**公式解释**:
+- 该公式计算缩放点积注意力 (Scaled Dot-Product Attention)
+- 缩放因子 $\sqrt{d_k}$ 防止点积值过大导致 softmax 梯度消失
+
+**符号说明**:
+
+| 符号 | 含义 | 维度 | 取值范围 |
+|------|------|------|----------|
+| $Q$ | Query 矩阵 | $[B, N, d_k]$ | $\mathbb{R}$ |
+| $K$ | Key 矩阵 | $[B, N, d_k]$ | $\mathbb{R}$ |
+| $V$ | Value 矩阵 | $[B, N, d_v]$ | $\mathbb{R}$ |
+| $d_k$ | Key 维度 | scalar | 通常 64 |
+| $N$ | 序列长度 | scalar | > 0 |
+| $B$ | 批次大小 | scalar | > 0 |
+
+**维度推导**:
+
+1. $QK^T$: $[B, N, d_k] \times [B, d_k, N] = [B, N, N]$
+2. $\text{softmax}(\cdot)$: $[B, N, N]$ (沿最后一维归一化)
+3. $\text{Attn} \times V$: $[B, N, N] \times [B, N, d_v] = [B, N, d_v]$
+```
+
+##### 4.3.2 公式推导过程 (复杂公式)
+
+```markdown
+### 公式推导
+
+**目标**: 推导 Layer Normalization 的反向传播公式
+
+**前向传播**:
+
+$$
+\hat{x}_i = \frac{x_i - \mu}{\sqrt{\sigma^2 + \epsilon}}
+$$
+
+$$
+y_i = \gamma \hat{x}_i + \beta
+$$
+
+其中:
+- $\mu = \frac{1}{D}\sum_{i=1}^{D} x_i$ (均值)
+- $\sigma^2 = \frac{1}{D}\sum_{i=1}^{D} (x_i - \mu)^2$ (方差)
+
+**反向传播推导**:
+
+Step 1: 计算 $\frac{\partial \mathcal{L}}{\partial \hat{x}_i}$
+
+$$
+\frac{\partial \mathcal{L}}{\partial \hat{x}_i} = \frac{\partial \mathcal{L}}{\partial y_i} \cdot \gamma
+$$
+
+Step 2: 计算 $\frac{\partial \mathcal{L}}{\partial \sigma^2}$
+
+$$
+\frac{\partial \mathcal{L}}{\partial \sigma^2} = \sum_{i=1}^{D} \frac{\partial \mathcal{L}}{\partial \hat{x}_i} \cdot (x_i - \mu) \cdot \left(-\frac{1}{2}\right)(\sigma^2 + \epsilon)^{-3/2}
+$$
+
+Step 3: 计算 $\frac{\partial \mathcal{L}}{\partial \mu}$ ... (继续推导)
+```
+
+##### 4.3.3 Loss Function 详解
+
+```markdown
+### Loss Function 分析
+
+**总损失函数**:
+
+$$
+\mathcal{L}_{total} = \mathcal{L}_{cls} + \lambda_1 \mathcal{L}_{reg} + \lambda_2 \mathcal{L}_{aux}
+$$
+
+**各项说明**:
+
+| 损失项 | 公式 | 作用 | 权重 |
+|--------|------|------|------|
+| $\mathcal{L}_{cls}$ | $-\sum_i y_i \log(\hat{y}_i)$ | 分类损失 | 1.0 |
+| $\mathcal{L}_{reg}$ | $\|\|W\|\|_2^2$ | L2 正则化 | $\lambda_1 = 0.01$ |
+| $\mathcal{L}_{aux}$ | 见下文 | 辅助监督 | $\lambda_2 = 0.4$ |
+
+**辅助损失详解**:
+
+$$
+\mathcal{L}_{aux} = \text{CrossEntropy}(\text{AuxHead}(f_{mid}), y)
+$$
+
+- 作用: 在中间层添加监督信号，缓解梯度消失
+- 来源: Paper Section 4.2
+- 注意: 仅在训练时使用，推理时移除
+```
+
+#### 4.4 文档输出结构
+
+完成复现后，应生成以下文档结构：
+
+```
+output/
+├── README.md                    # 项目总览
+├── docs/
+│   ├── architecture.md          # 整体架构文档
+│   ├── modules/
+│   │   ├── backbone.md          # 骨干网络文档
+│   │   ├── attention.md         # 注意力模块文档
+│   │   ├── head.md              # 输出头文档
+│   │   └── loss.md              # 损失函数文档
+│   ├── math/
+│   │   ├── formulas.md          # 公式汇总
+│   │   └── derivations.md       # 推导过程
+│   └── diagrams/
+│       ├── overview.md          # 整体流程图
+│       └── tensor_shapes.md     # 张量形状变化图
+├── model.py
+├── modules/
+│   └── ...
+└── requirements.txt
+```
+
+#### 4.5 模块文档示例
+
+```markdown
+# Bottleneck Block 技术文档
+
+## 1. 模块概述
+
+**功能**: ResNet 的核心构建块，通过残差连接实现深层网络的有效训练。
+
+**架构位置**: 位于 ResNet 的 Stage 2-5，每个 Stage 包含多个 Bottleneck 块。
+
+**输入输出规格**:
+- 输入: `[B, C_in, H, W]`
+- 输出: `[B, C_out, H', W']`
+- 其中 `C_out = C_mid × 4` (expansion factor)
+
+## 2. 数学原理
+
+### 残差映射公式
+
+$$
+\mathbf{y} = \mathcal{F}(\mathbf{x}, \{W_i\}) + \mathcal{G}(\mathbf{x})
+$$
+
+其中:
+
+$$
+\mathcal{F}(\mathbf{x}) = W_3 \cdot \text{ReLU}(W_2 \cdot \text{ReLU}(W_1 \cdot \mathbf{x}))
+$$
+
+$$
+\mathcal{G}(\mathbf{x}) = \begin{cases} 
+\mathbf{x} & \text{if } C_{in} = C_{out} \text{ and } s = 1 \\
+W_s \cdot \mathbf{x} & \text{otherwise}
+\end{cases}
+$$
+
+**符号说明**:
+
+| 符号 | 含义 | 维度 |
+|------|------|------|
+| $\mathbf{x}$ | 输入特征 | $[B, C_{in}, H, W]$ |
+| $W_1$ | 1×1 卷积 (降维) | $[C_{mid}, C_{in}, 1, 1]$ |
+| $W_2$ | 3×3 卷积 (空间) | $[C_{mid}, C_{mid}, 3, 3]$ |
+| $W_3$ | 1×1 卷积 (升维) | $[C_{out}, C_{mid}, 1, 1]$ |
+| $W_s$ | 1×1 卷积 (投影) | $[C_{out}, C_{in}, 1, 1]$ |
+
+## 3. 数据流图
+
+```mermaid
+flowchart TB
+    subgraph Input
+        X["x: [B, C_in, H, W]"]
+    end
+
+    subgraph MainPath["主路径 F(x)"]
+        C1["Conv1×1 + BN + ReLU<br/>[B, C_mid, H, W]"]
+        C2["Conv3×3 + BN + ReLU<br/>[B, C_mid, H', W']"]
+        C3["Conv1×1 + BN<br/>[B, C_out, H', W']"]
+    end
+
+    subgraph SkipPath["跳跃连接 G(x)"]
+        S["Identity / Conv1×1+BN<br/>[B, C_out, H', W']"]
+    end
+
+    subgraph Output
+        Add(("+"))
+        R["ReLU"]
+        Y["y: [B, C_out, H', W']"]
+    end
+
+    X --> C1 --> C2 --> C3 --> Add
+    X --> S --> Add
+    Add --> R --> Y
+
+    style X fill:#e1f5fe,stroke:#01579b
+    style C1 fill:#fff3e0,stroke:#e65100
+    style C2 fill:#fff3e0,stroke:#e65100
+    style C3 fill:#fff3e0,stroke:#e65100
+    style S fill:#fce4ec,stroke:#c2185b
+    style Add fill:#f3e5f5,stroke:#7b1fa2
+    style Y fill:#e8f5e9,stroke:#2e7d32
+```
+
+### 张量形状变化 (stride=2 示例)
+
+```mermaid
+flowchart LR
+    S1["[B, 256, 56, 56]"]
+    S2["[B, 128, 56, 56]"]
+    S3["[B, 128, 28, 28]"]
+    S4["[B, 512, 28, 28]"]
+
+    S1 -->|"Conv1×1"| S2
+    S2 -->|"Conv3×3, s=2"| S3
+    S3 -->|"Conv1×1"| S4
+
+    style S1 fill:#e3f2fd
+    style S2 fill:#fff3e0
+    style S3 fill:#fff3e0
+    style S4 fill:#e8f5e9
+```
+
+## 4. 实现细节
+
+### 关键代码
+
+```python
+class Bottleneck(nn.Module):
+    expansion = 4  # C_out = C_mid × 4
+
+    def __init__(self, in_ch, mid_ch, stride=1, downsample=None):
+        super().__init__()
+        out_ch = mid_ch * self.expansion
+
+        # 1×1 conv: reduce channels
+        self.conv1 = nn.Conv2d(in_ch, mid_ch, 1, bias=False)
+        self.bn1 = nn.BatchNorm2d(mid_ch)
+
+        # 3×3 conv: spatial processing (may downsample)
+        self.conv2 = nn.Conv2d(mid_ch, mid_ch, 3, stride, 1, bias=False)
+        self.bn2 = nn.BatchNorm2d(mid_ch)
+
+        # 1×1 conv: expand channels
+        self.conv3 = nn.Conv2d(mid_ch, out_ch, 1, bias=False)
+        self.bn3 = nn.BatchNorm2d(out_ch)
+
+        self.relu = nn.ReLU(inplace=True)
+        self.downsample = downsample
+```
+
+### 设计决策
+
+| 决策 | 选择 | 原因 |
+|------|------|------|
+| bias=False | 卷积不使用偏置 | BN 会学习偏置，避免冗余 |
+| ReLU inplace | True | 节省内存 |
+| 下采样位置 | 3×3 conv | 论文原始设计 |
+
+## 5. 使用示例
+
+```python
+# 创建 Bottleneck (无下采样)
+block = Bottleneck(in_ch=256, mid_ch=64)
+x = torch.randn(2, 256, 56, 56)
+y = block(x)  # [2, 256, 56, 56]
+
+# 创建 Bottleneck (有下采样)
+downsample = nn.Sequential(
+    nn.Conv2d(256, 512, 1, stride=2, bias=False),
+    nn.BatchNorm2d(512)
+)
+block = Bottleneck(in_ch=256, mid_ch=128, stride=2, downsample=downsample)
+x = torch.randn(2, 256, 56, 56)
+y = block(x)  # [2, 512, 28, 28]
+```
+
+## 6. 注意事项
+
+### 常见问题
+
+1. **维度不匹配**: 当 stride > 1 或通道数变化时，必须提供 downsample
+2. **梯度消失**: 残差连接确保梯度可以直接回传
+
+### 性能考量
+
+- 1×1 卷积减少计算量约 9 倍 (相比直接使用 3×3)
+- inplace ReLU 节省约 50% 激活内存
+
+### 与论文差异
+
+无差异，完全按照论文 Section 3.3 实现。
+```
+
+---
+
 ## "Paper Did Not Specify" Protocol
 
 当论文未明确说明某个超参数或实现细节时，必须遵循以下规范：
@@ -505,15 +1002,28 @@ nn.BatchNorm2d(channels, momentum=0.1)  # Equivalent to TF momentum=0.9
 
 ```
 output/
-├── README.md           # 论文概述、使用说明
-├── model.py            # 主模型实现
-├── modules/            # 子模块
+├── README.md                    # 论文概述、使用说明
+├── docs/                        # 技术文档
+│   ├── architecture.md          # 整体架构文档
+│   ├── modules/                 # 模块文档
+│   │   ├── backbone.md          # 骨干网络文档
+│   │   ├── attention.md         # 注意力模块文档 (如适用)
+│   │   ├── head.md              # 输出头文档
+│   │   └── loss.md              # 损失函数文档
+│   ├── math/                    # 数学文档
+│   │   ├── formulas.md          # 公式汇总
+│   │   └── derivations.md       # 推导过程 (如适用)
+│   └── diagrams/                # 流程图文档
+│       ├── overview.md          # 整体架构流程图
+│       └── tensor_shapes.md     # 张量形状变化图
+├── model.py                     # 主模型实现
+├── modules/                     # 子模块
 │   ├── __init__.py
-│   ├── attention.py    # 注意力模块
-│   ├── backbone.py     # 骨干网络
-│   └── head.py         # 输出头
-├── config.py           # 配置文件
-└── requirements.txt    # 依赖列表
+│   ├── attention.py             # 注意力模块
+│   ├── backbone.py              # 骨干网络
+│   └── head.py                  # 输出头
+├── config.py                    # 配置文件
+└── requirements.txt             # 依赖列表
 ```
 
 ---
@@ -557,6 +1067,16 @@ output/
 - [ ] 包含 `_init_weights` 方法
 - [ ] 包含 `set_seed` 函数
 - [ ] 未指定参数已按 Protocol 标注
+
+**Phase 4 - 模块文档**:
+- [ ] 每个核心模块有独立文档
+- [ ] 文档包含完整的 6 个部分 (概述/数学/流程图/实现/示例/注意事项)
+- [ ] Mermaid 流程图清晰展示数据流
+- [ ] 张量形状变化图完整
+- [ ] 公式使用 LaTeX 格式并有符号说明表
+- [ ] 复杂公式包含推导过程
+- [ ] Loss Function 有详细分析
+- [ ] 文档结构符合规范 (docs/modules/, docs/math/, docs/diagrams/)
 
 **验证测试**:
 - [ ] 随机 Tensor 前向传播无报错
