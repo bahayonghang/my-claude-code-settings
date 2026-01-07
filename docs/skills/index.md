@@ -17,6 +17,19 @@ MyClaude Skills provides a collection of specialized AI skills for different dev
 | [tech-blog](./tech-blog) | Documentation | Write technical blog posts |
 | [tech-design-doc](./tech-design-doc) | Documentation | Generate technical design documents |
 
+### OMO Agents (Multi-Agent System)
+
+| Skill | Role | Description |
+|-------|------|-------------|
+| [omo-agents](./omo-agents) | Overview | Multi-agent orchestration system guide |
+| [sisyphus](./sisyphus) | Orchestrator | Complex task planning and parallel execution |
+| [oracle](./oracle) | Architect | Design decisions, code review, debugging |
+| [explore](./explore) | Scout | Fast code search and dependency tracing |
+| [librarian](./librarian) | Researcher | External docs and best practices |
+| [frontend-engineer](./frontend-engineer) | UI Expert | Beautiful, polished interfaces |
+| [document-writer](./document-writer) | Writer | README, API docs, architecture docs |
+| [multimodal-looker](./multimodal-looker) | Analyst | Images, PDFs, charts analysis |
+
 ## Skill Categories
 
 ### Design Skills
@@ -40,6 +53,27 @@ Skills for creating technical documents:
 - **tech-blog** - Technical blog posts
 - **tech-design-doc** - Design documents
 - **spec-interview** - Specification refinement
+
+### OMO Agents (Multi-Agent System)
+
+Inspired by [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode), these skills enable multi-agent collaboration where specialized agents work together on complex tasks.
+
+**Core Concept**: Instead of a single AI handling everything, specialized agents collaborate—each excelling in their domain—to deliver better results.
+
+- **sisyphus** - Main orchestrator that plans, delegates, and executes complex tasks
+- **oracle** - Expert architect for design decisions and code review
+- **explore** - Fast code search for locating code and tracing dependencies
+- **librarian** - Documentation researcher for external docs and best practices
+- **frontend-engineer** - UI/UX expert for creating beautiful interfaces
+- **document-writer** - Technical writer for README and API docs
+- **multimodal-looker** - Visual analyst for images, PDFs, and charts
+
+**Quick Start**:
+```
+@sisyphus Add user authentication to this project
+```
+
+Sisyphus will automatically coordinate other agents to complete the task.
 
 ## Installation
 

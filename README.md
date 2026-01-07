@@ -10,6 +10,7 @@ A curated collection of Claude Code skills and prompts for enhanced AI-assisted 
 - 📦 Unified skill format (`SKILL.md`) for easy extension and maintenance
 - 🔄 Cross-platform installation scripts (Bash + PowerShell)
 - 🎛️ Dual target support: Claude Code (`~/.claude/`) and Codex CLI (`~/.codex/`)
+- ⚡ Slash commands for common workflows (git commit, etc.)
 
 ## Prerequisites
 
@@ -47,6 +48,29 @@ Run `./install.sh help` for more options.
 | [paper-replication](skills/paper-replication/) | Replicate deep learning papers into industrial-grade PyTorch code |
 | [tech-blog](skills/tech-blog/) | Write technical blog posts with source code analysis |
 | [tech-design-doc](skills/tech-design-doc/) | Generate structured technical design documents |
+
+## Commands
+
+Slash commands provide quick access to common workflows. Install them to `~/.claude/commands/`.
+
+| Command | Description |
+|---------|-------------|
+| [git-commit](commands/git-commit.md) | Analyze changes and generate Conventional Commits messages (optional emoji) |
+
+### OMO Agents (Multi-Agent System)
+
+Inspired by [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode), these skills enable multi-agent collaboration where specialized agents work together on complex tasks.
+
+| Skill | Description |
+|-------|-------------|
+| [omo-agents](skills/omo-agents/) | Multi-agent orchestration system overview and usage guide |
+| [sisyphus](skills/sisyphus/) | Main orchestrator for complex task planning and parallel execution |
+| [oracle](skills/oracle/) | Expert architect for design decisions, code review, and debugging |
+| [explore](skills/explore/) | Fast code search agent for locating code and tracing dependencies |
+| [librarian](skills/librarian/) | Documentation researcher for external docs and best practices |
+| [frontend-engineer](skills/frontend-engineer/) | UI/UX expert for creating beautiful, polished interfaces |
+| [document-writer](skills/document-writer/) | Technical writer for README, API docs, and architecture docs |
+| [multimodal-looker](skills/multimodal-looker/) | Visual analyst for images, PDFs, charts, and diagrams |
 
 ## Installation
 
@@ -119,6 +143,8 @@ cd my-claude-skills
 ├── prompts/
 │   ├── CLAUDE.md           # Global workflow configuration
 │   └── TRANSLATE.md        # Translation guidelines
+├── commands/               # Slash commands
+│   └── git-commit.md       # Git commit command
 └── skills/
     └── <skill-name>/
         ├── SKILL.md        # Skill definition (required)

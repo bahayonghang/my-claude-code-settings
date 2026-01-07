@@ -17,6 +17,19 @@ MyClaude Skills 提供一系列专门的 AI 技能，用于不同的开发任务
 | [tech-blog](./tech-blog) | 文档 | 撰写技术博客 |
 | [tech-design-doc](./tech-design-doc) | 文档 | 生成技术设计文档 |
 
+### OMO Agents (多代理系统)
+
+| 技能 | 角色 | 描述 |
+|------|------|------|
+| [omo-agents](./omo-agents) | 概览 | 多代理编排系统使用指南 |
+| [sisyphus](./sisyphus) | 编排者 | 复杂任务规划和并行执行 |
+| [oracle](./oracle) | 架构师 | 设计决策、代码审查、调试 |
+| [explore](./explore) | 侦察兵 | 快速代码搜索和依赖追踪 |
+| [librarian](./librarian) | 研究员 | 外部文档和最佳实践 |
+| [frontend-engineer](./frontend-engineer) | UI 专家 | 精美、精致的界面 |
+| [document-writer](./document-writer) | 写手 | README、API 文档、架构文档 |
+| [multimodal-looker](./multimodal-looker) | 分析师 | 图片、PDF、图表分析 |
+
 ## 技能分类
 
 ### 设计类技能
@@ -40,6 +53,27 @@ MyClaude Skills 提供一系列专门的 AI 技能，用于不同的开发任务
 - **tech-blog** - 技术博客文章
 - **tech-design-doc** - 设计文档
 - **spec-interview** - 规格说明完善
+
+### OMO Agents (多代理系统)
+
+受 [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode) 启发，这些技能实现多代理协作，让专业代理协同处理复杂任务。
+
+**核心理念**: 不再是单个 AI 处理所有事情，而是让专业代理协同工作——各自发挥所长——交付更好的结果。
+
+- **sisyphus** - 主编排代理，规划、委派和执行复杂任务
+- **oracle** - 专家架构师，负责设计决策和代码审查
+- **explore** - 快速代码搜索，定位代码和追踪依赖
+- **librarian** - 文档研究员，查找外部文档和最佳实践
+- **frontend-engineer** - UI/UX 专家，创建精美界面
+- **document-writer** - 技术写手，撰写 README 和 API 文档
+- **multimodal-looker** - 视觉分析师，分析图片、PDF 和图表
+
+**快速开始**:
+```
+@sisyphus 给这个项目添加用户认证功能
+```
+
+Sisyphus 会自动协调其他代理完成任务。
 
 ## 安装
 

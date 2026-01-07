@@ -10,6 +10,7 @@ Claude Code 技能和提示词集合，用于增强 AI 辅助开发工作流。
 - 📦 统一的技能定义格式（`SKILL.md`），便于扩展和维护
 - 🔄 跨平台安装脚本（Bash + PowerShell）
 - 🎛️ 双目标支持：Claude Code (`~/.claude/`) 和 Codex CLI (`~/.codex/`)
+- ⚡ 斜杠命令，用于常见工作流（git commit 等）
 
 ## 前置要求
 
@@ -47,6 +48,29 @@ cd my-claude-skills
 | [paper-replication](skills/paper-replication/) | 将深度学习论文复现为工业级 PyTorch 代码 |
 | [tech-blog](skills/tech-blog/) | 撰写带源码分析的技术博客 |
 | [tech-design-doc](skills/tech-design-doc/) | 生成结构化的技术设计文档 |
+
+## 命令
+
+斜杠命令提供常见工作流的快捷访问。安装到 `~/.claude/commands/`。
+
+| 命令 | 描述 |
+|------|------|
+| [git-commit](commands/git-commit.md) | 分析改动并生成 Conventional Commits 风格的提交信息（可选 emoji） |
+
+### OMO Agents (多代理系统)
+
+受 [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode) 启发，这些技能实现多代理协作，让专业代理协同处理复杂任务。
+
+| 技能 | 描述 |
+|------|------|
+| [omo-agents](skills/omo-agents/) | 多代理编排系统概览和使用指南 |
+| [sisyphus](skills/sisyphus/) | 主编排代理，用于复杂任务规划和并行执行 |
+| [oracle](skills/oracle/) | 专家架构师，负责设计决策、代码审查和调试指导 |
+| [explore](skills/explore/) | 快速代码搜索代理，定位代码和追踪依赖 |
+| [librarian](skills/librarian/) | 文档研究员，查找外部文档和最佳实践 |
+| [frontend-engineer](skills/frontend-engineer/) | UI/UX 专家，创建精美、精致的界面 |
+| [document-writer](skills/document-writer/) | 技术写手，撰写 README、API 文档和架构文档 |
+| [multimodal-looker](skills/multimodal-looker/) | 视觉分析师，分析图片、PDF、图表和图表 |
 
 ## 安装方法
 
@@ -119,6 +143,8 @@ cd my-claude-skills
 ├── prompts/
 │   ├── CLAUDE.md           # 全局工作流配置
 │   └── TRANSLATE.md        # 翻译指南
+├── commands/               # 斜杠命令
+│   └── git-commit.md       # Git 提交命令
 └── skills/
     └── <skill-name>/
         ├── SKILL.md        # 技能定义（必需）
