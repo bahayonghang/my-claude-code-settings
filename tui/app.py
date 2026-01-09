@@ -10,6 +10,7 @@ from textual.binding import Binding
 
 from .screens.platform_select import PlatformSelectScreen
 from .screens.main_screen import MainScreen
+from .core import myclaudeTheme
 
 
 class SkillInstallerApp(App):
@@ -40,12 +41,16 @@ class SkillInstallerApp(App):
         """初始化应用"""
         super().__init__()
         self.current_platform: str | None = None
+        # 注册 MyClaude 自定义主题
+        self.register_theme(myclaudeTheme)
     
     def on_mount(self) -> None:
         """应用挂载时显示平台选择屏幕
         
         Requirements: 1.1 - 启动时首先显示平台选择界面
         """
+        # 应用 MyClaude 主题
+        self.theme = "myclaude"
         self.push_screen("platform_select")
     
     def set_platform(self, platform: str) -> None:

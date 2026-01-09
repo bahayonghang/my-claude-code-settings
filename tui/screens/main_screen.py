@@ -70,18 +70,29 @@ class MainScreen(Screen):
     
     MainScreen #search-container {
         width: 100%;
-        height: 3;
-        padding: 0 2 1 2;
+        height: 5;
+        padding: 1 2;
     }
     
     MainScreen #search-container.-hidden {
         display: none;
     }
     
+    /* 搜索框样式 - Requirements: 7.1, 7.2, 7.3 */
     MainScreen #search-input {
         width: 100%;
+        height: 3;
+        border: round $panel;
+        background: $background;
+        padding: 0 2;
     }
     
+    MainScreen #search-input:focus {
+        border: round $accent;
+        background: $surface;
+    }
+    
+    /* TabbedContent 样式 - Requirements: 6.1, 6.2, 6.3, 6.4 */
     MainScreen TabbedContent {
         height: 1fr;
     }
