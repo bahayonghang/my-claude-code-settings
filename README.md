@@ -9,14 +9,14 @@ A curated collection of Claude Code skills and prompts for enhanced AI-assisted 
 - 🎯 Reusable AI skill modules covering frontend design, research, documentation, and more
 - 📦 Unified skill format (`SKILL.md`) for easy extension and maintenance
 - 🔄 Cross-platform Python installation script (`install.py`)
-- 🎛️ Multi-target support: Claude Code (`~/.claude/`), Codex CLI (`~/.codex/`), and Gemini CLI (`~/.gemini/`)
+- 🎛️ Multi-target support: Claude Code (`~/.claude/`), Codex CLI (`~/.codex/`), Gemini CLI (`~/.gemini/`), and Qwen Code (`~/.qwen/`)
 - ⚡ Slash commands for common workflows (git commit, etc.)
 
 ## Prerequisites
 
 - Git
 - Python 3.6+
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), or [Gemini CLI](https://geminicli.com)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), [Gemini CLI](https://geminicli.com), or [Qwen Code](https://qwenlm.github.io/qwen-code-docs/)
 
 ## Quick Start
 
@@ -51,6 +51,10 @@ Run `python3 install.py --help` for more options.
 | [paper-replication](skills/paper-replication/) | Replicate deep learning papers into industrial-grade PyTorch code with detailed module documentation |
 | [tech-blog](skills/tech-blog/) | Write technical blog posts with source code analysis |
 | [tech-design-doc](skills/tech-design-doc/) | Generate structured technical design documents |
+| [claude-expert-skill-creator](skills/claude-expert-skill-creator/) | Create production-ready skills from expert knowledge with layered architecture |
+| [IEEE-writing-skills](skills/IEEE-writing-skills/) | Translate, polish, restructure, and validate academic papers for IEEE publications |
+| [latex-paper-en](skills/latex-paper-en/) | LaTeX academic paper assistant for English conference/journal papers |
+| [latex-thesis-zh](skills/latex-thesis-zh/) | Chinese doctoral/master thesis LaTeX assistant with GB/T 7714 support |
 
 ## Commands
 
@@ -94,6 +98,9 @@ python3 install.py --target gemini install-all
 # Install to Codex
 python3 install.py --target codex install-all
 
+# Install to Qwen
+python3 install.py --target qwen install-all
+
 # Update global CLAUDE.md
 python3 install.py prompt-update
 ```
@@ -120,7 +127,7 @@ python3 install_tui.py
 ```
 
 The TUI provides:
-- 🎯 Visual platform selection (Claude/Codex/Gemini)
+- 🎯 Visual platform selection (Claude/Codex/Gemini/Qwen)
 - 📋 Tabbed interface for Skills and Commands
 - ⌨️ Keyboard shortcuts for quick operations
 - 🔍 Real-time search filtering
@@ -223,12 +230,13 @@ Technical content translation guidelines:
 
 ## FAQ
 
-**Q: What's the difference between Claude, Codex, and Gemini targets?**
+**Q: What's the difference between Claude, Codex, Gemini, and Qwen targets?**
 
 A: The target determines the installation directory:
 - Claude: `~/.claude/skills/` (default)
 - Codex: `~/.codex/skills/`
 - Gemini: `~/.gemini/skills/`
+- Qwen: `~/.qwen/skills/`
 
 **Q: How do I update an existing skill?**
 

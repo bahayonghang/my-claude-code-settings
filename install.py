@@ -1,39 +1,15 @@
 #!/usr/bin/env python3
-import os
-import sys
-import shutil
-import argparse
-import datetime
+"""
+命令行交互版本的技能管理器，使用typer实现
+"""
+import typer
 from pathlib import Path
-from dataclasses import dataclass
-from typing import Optional, List
-from enum import Enum
+import sys
 
-# --- Data Models for TUI ---
-class SkillStatus(Enum):
-    """Installation status of a skill."""
-    INSTALLED = "installed"
-    NOT_INSTALLED = "not_installed"
-    EXTERNAL = "external"
-
-@dataclass
-class SkillInfo:
-    """Structured information about a skill."""
-    name: str
-    description: Optional[str] = None
-    status: SkillStatus = SkillStatus.NOT_INSTALLED
-    source_path: Optional[Path] = None
-    target_path: Optional[Path] = None
-
-@dataclass
-class InstallationResult:
-    """Result of an installation operation."""
-    success: bool
-    skill_name: str
-    source_path: Path
-    target_path: Path
-    message: str
-    error: Optional[str] = None
+# 将 install.py 中的代码复制过来以保持功能一致
+import os
+import shutil
+import datetime
 
 # --- Colors & Styles (Standard ANSI) ---
 class Colors:
@@ -74,6 +50,12 @@ TARGET_CONFIG = {
         "base": HOME_DIR / ".gemini",
         "skills": HOME_DIR / ".gemini" / "skills",
         "commands": HOME_DIR / ".gemini" / "commands",
+        "prompt": None
+    },
+    "qwen": {
+        "base": HOME_DIR / ".qwen",
+        "skills": HOME_DIR / ".qwen" / "skills",
+        "commands": HOME_DIR / ".qwen" / "commands",
         "prompt": None
     }
 }
@@ -126,7 +108,7 @@ class SkillManager:
 
         for skill in installed:
             source = "This repository" if (SKILLS_SRC_DIR / skill.name).exists() else "External"
-            print(f" • {Colors.SUCCESS}{skill.name}{Colors.ENDC} ({source})")
+            print(f" - {Colors.SUCCESS}{skill.name}{Colors.ENDC} ({source})")
 
     def install_skill(self, skill_name, quiet=False):
         src = SKILLS_SRC_DIR / skill_name
@@ -148,14 +130,14 @@ class SkillManager:
     def install_commands(self):
         log_info(f"Installing commands for {self.target}...")
         self.ensure_dirs()
-        
+
         # Determine source directory based on target
-        if self.target == "gemini":
+        if self.target in ["gemini", "qwen"]:
             src_cmd_dir = COMMANDS_SRC_DIR / "gemini"
         else:
             # Claude and Codex share commands from 'claude' folder
             src_cmd_dir = COMMANDS_SRC_DIR / "claude"
-            
+
         if not src_cmd_dir.exists():
             log_warn(f"No specific commands found for target {self.target} in {src_cmd_dir}")
             return
@@ -165,7 +147,7 @@ class SkillManager:
             # shutil.copytree requires the destination dir to not exist for Python < 3.8 if dirs_exist_ok is not used
             # We use dirs_exist_ok=True (Python 3.8+) to allow merging/overwriting
             shutil.copytree(src_cmd_dir, self.target_commands_dir, dirs_exist_ok=True)
-            
+
             log_success(f"Installed commands to {self.target_commands_dir}")
             if self.target == "codex":
                 log_info(f"Note: For Codex, commands are installed as prompts in {self.target_commands_dir}")
@@ -180,7 +162,7 @@ class SkillManager:
             if self.install_skill(name, quiet=True):
                 count += 1
         log_success(f"Finished! Installed {count} skills.")
-        
+
         # Also install commands
         self.install_commands()
 
@@ -191,7 +173,7 @@ class SkillManager:
             val = input(f"\n{Colors.INFO}Select numbers to install (space-separated, or 'all'):{Colors.ENDC} ").strip()
         except EOFError:
             return
-        
+
         if val.lower() == 'all':
             self.install_all()
             return
@@ -256,31 +238,68 @@ class SkillManager:
             for line in diff:
                 sys.stdout.write(line)
 
-def main():
-    parser = argparse.ArgumentParser(description="Unified Skills & Config Manager")
-    parser.add_argument("command", choices=["list", "installed", "install", "install-all", "install-commands", "interactive", "prompt-update", "prompt-diff"], help="Command to execute")
-    parser.add_argument("skills", nargs="*", help="Skill names to install (for 'install' command)")
-    parser.add_argument("--target", choices=["claude", "codex", "gemini"], default="claude", help="Target platform (default: claude)")
+# 创建 typer 应用
+app = typer.Typer(
+    name="skill-installer",
+    help="Unified Skills & Config Manager - 命令行交互版本",
+    epilog="使用 typer 构建的技能管理工具"
+)
 
-    args = parser.parse_args()
-    mgr = SkillManager(args.target)
+@app.command()
+def list_skills(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """列出可用的技能"""
+    mgr = SkillManager(target)
+    mgr.list_available()
 
-    if args.command == "list": mgr.list_available()
-    elif args.command == "installed": mgr.list_installed()
-    elif args.command == "install":
-        if not args.skills:
-            log_error("Please specify at least one skill name.")
-        else:
-            for s in args.skills: mgr.install_skill(s)
-    elif args.command == "install-all": mgr.install_all()
-    elif args.command == "install-commands": mgr.install_commands()
-    elif args.command == "interactive": mgr.interactive()
-    elif args.command == "prompt-update": mgr.prompt_update()
-    elif args.command == "prompt-diff": mgr.prompt_diff()
+@app.command()
+def installed(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """列出已安装的技能"""
+    mgr = SkillManager(target)
+    mgr.list_installed()
+
+@app.command()
+def install(
+    skills: list[str] = typer.Argument(..., help="要安装的技能名称"),
+    target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")
+):
+    """安装指定的技能"""
+    mgr = SkillManager(target)
+    for skill in skills:
+        mgr.install_skill(skill)
+
+@app.command()
+def install_all(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """安装所有技能"""
+    mgr = SkillManager(target)
+    mgr.install_all()
+
+@app.command()
+def install_commands(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """安装命令"""
+    mgr = SkillManager(target)
+    mgr.install_commands()
+
+@app.command()
+def interactive(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """交互式安装"""
+    mgr = SkillManager(target)
+    mgr.interactive()
+
+@app.command()
+def prompt_update(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """更新 CLAUDE.md 提示文件"""
+    mgr = SkillManager(target)
+    mgr.prompt_update()
+
+@app.command()
+def prompt_diff(target: str = typer.Option("claude", "--target", "-t", help="Target platform (claude, codex, gemini, qwen)")):
+    """比较本地和全局 CLAUDE.md 提示文件"""
+    mgr = SkillManager(target)
+    mgr.prompt_diff()
 
 if __name__ == "__main__":
     try:
-        main()
+        app()
     except KeyboardInterrupt:
         print("\nAborted by user.")
         sys.exit(0)

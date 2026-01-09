@@ -72,7 +72,7 @@ class TUIManager:
         Returns:
             源目录是否存在
         """
-        if self.platform == "gemini":
+        if self.platform in ["gemini", "qwen"]:
             src_dir = COMMANDS_SRC_DIR / "gemini"
         else:
             src_dir = COMMANDS_SRC_DIR / "claude"
@@ -84,7 +84,7 @@ class TUIManager:
     
     def get_commands_source_dir(self) -> Path:
         """获取命令源目录路径"""
-        if self.platform == "gemini":
+        if self.platform in ["gemini", "qwen"]:
             return COMMANDS_SRC_DIR / "gemini"
         return COMMANDS_SRC_DIR / "claude"
     
@@ -122,7 +122,7 @@ class TUIManager:
         """获取所有命令列表
         
         根据平台返回对应的命令列表:
-        - gemini: 从 commands/gemini/ 获取
+        - gemini/qwen: 从 commands/gemini/ 获取
         - claude/codex: 从 commands/claude/ 获取
         
         Returns:
@@ -134,7 +134,7 @@ class TUIManager:
         commands = []
         
         # 根据平台确定命令源目录
-        if self.platform == "gemini":
+        if self.platform in ["gemini", "qwen"]:
             src_dir = COMMANDS_SRC_DIR / "gemini"
         else:
             src_dir = COMMANDS_SRC_DIR / "claude"
@@ -232,7 +232,7 @@ class TUIManager:
         import shutil
         
         # 根据平台确定命令源目录
-        if self.platform == "gemini":
+        if self.platform in ["gemini", "qwen"]:
             src_dir = COMMANDS_SRC_DIR / "gemini"
         else:
             src_dir = COMMANDS_SRC_DIR / "claude"

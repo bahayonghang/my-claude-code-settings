@@ -109,6 +109,7 @@ class PlatformSelectScreen(Screen):
         PlatformConfig("claude", "Claude", "~/.claude/"),
         PlatformConfig("codex", "Codex", "~/.codex/"),
         PlatformConfig("gemini", "Gemini", "~/.gemini/"),
+        PlatformConfig("qwen", "Qwen", "~/.qwen/"),
     ]
     
     def compose(self) -> ComposeResult:

@@ -4,7 +4,7 @@
 
 - Git
 - Python 3.6+
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), 或 [Gemini CLI](https://geminicli.com)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Codex CLI](https://github.com/openai/codex), [Gemini CLI](https://geminicli.com), 或 [Qwen Code](https://qwenlm.github.io/qwen-code-docs/)
 
 ## 克隆仓库
 
@@ -30,6 +30,9 @@ python3 install.py --target gemini install-all
 
 # 安装到 Codex
 python3 install.py --target codex install-all
+
+# 安装到 Qwen
+python3 install.py --target qwen install-all
 ```
 
 ### 更新全局提示词
@@ -54,7 +57,7 @@ python3 install_tui.py
 
 ### 功能特性
 
-- 🎯 可视化平台选择 (Claude/Codex/Gemini)
+- 🎯 可视化平台选择 (Claude/Codex/Gemini/Qwen)
 - 📋 Skills 和 Commands 双标签页界面
 - ⌨️ 键盘快捷键快速操作
 - 🔍 实时搜索过滤
@@ -99,3 +102,4 @@ python3 install.py installed
 | Claude | `~/.claude/skills/` |
 | Codex | `~/.codex/skills/` |
 | Gemini | `~/.gemini/skills/` |
+| Qwen | `~/.qwen/skills/` |
