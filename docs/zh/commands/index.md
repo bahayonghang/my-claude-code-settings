@@ -6,6 +6,8 @@
 
 | 命令 | 描述 |
 |------|------|
+| [export](/zh/commands/export) | 总结会话上下文并导出为 Markdown 文件 |
+| [import](/zh/commands/import) | 从总结文件中恢复会话上下文 |
 | [git-commit](/zh/commands/git-commit) | 分析改动并生成 Conventional Commits 风格的提交信息 |
 
 ## 什么是命令？

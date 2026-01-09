@@ -58,7 +58,9 @@ Slash commands provide quick access to common workflows. Install them to `~/.cla
 
 | Command | Description |
 |---------|-------------|
-| [git-commit](commands/git-commit.md) | Analyze changes and generate Conventional Commits messages (optional emoji) |
+| [export](commands/claude/export.md) | Summarize session context and export to a markdown file |
+| [import](commands/claude/import.md) | Restore session context from a summary file |
+| [git-commit](commands/claude/git-commit.md) | Analyze changes and generate Conventional Commits messages (optional emoji) |
 
 ### OMO Agents (Multi-Agent System)
 
